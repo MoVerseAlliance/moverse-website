@@ -138,23 +138,30 @@
             from { text-shadow: 0 0 5px #778da9; }
             to { text-shadow: 0 0 15px #778da9, 0 0 25px #415a77; }
         }
-        @media (max-width: 600px) {
-            h1 { font-size: 32px; }
-            .key-info { font-size: 16px; }
-            h2 { font-size: 22px; }
-            p { font-size: 16px; }
-            .controls { 
-                flex-direction: column; 
-                gap: 5px; 
-                right: 5px; /* 调整右边距 */
-            }
-            .lang-toggle { top: 5px; } /* 上移，避免溢出 */
-            .chain-toggle { top: 40px; } /* 调整位置 */
-            .button { padding: 8px 16px; }
-            section { margin: 20px; }
-            header { padding: 20px; } /* 减小 header 填充 */
-            .join-buttons .button { padding: 12px 24px; font-size: 18px; }
-        }
+       @media (max-width: 600px) {
+    h1 { font-size: 32px; }
+    .key-info { font-size: 16px; }
+    h2 { font-size: 22px; }
+    p { font-size: 16px; }
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+        right: 5px;
+    }
+    .lang-toggle {
+        top: 10px;
+    }
+    .chain-toggle {
+        top: 80px; /* 增大间距，避免重叠 */
+    }
+    .button { padding: 8px 16px; }
+    section { margin: 20px; }
+    header {
+        padding: 20px;
+        min-height: 120px; /* 确保足够空间 */
+    }
+    .join-buttons .button { padding: 12px 24px; font-size: 18px; }
+}
     </style>
 </head>
 <body>
