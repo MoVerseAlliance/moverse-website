@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">MoVerse | Web3 Trading Ecosystem</title>
+    <!-- 引入 i18next 库 -->
+    <script src="https://unpkg.com/i18next@23.11.2/dist/umd/i18next.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0d1b2a, #1b263b);
+            color: #e0e1dd;
+            line-height: 1.6;
+            text-align: center;
+        }
+        header {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-bottom: 2px solid #415a77;
+            position: relative;
+        }
+        h1 {
+            font-size: 48px;
+            margin: 0;
+            color: #778da9;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        h1 span {
+            color: #e0e1dd;
+            animation: glow 2s infinite alternate;
+        }
+        h2 {
+            font-size: 28px;
+            color: #778da9;
+            border-bottom: 1px dashed #415a77;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        section {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgba(27, 38, 59, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(65, 90, 119, 0.5);
+        }
+        p {
+            font-size: 18px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #415a77;
+            color: #e0e1dd;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #778da9;
+            box-shadow: 0 0 10px #778da9;
+        }
+        .lang-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        footer {
+            padding: 20px;
+            background: #0d1b2a;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #778da9; }
+            to { text-shadow: 0 0 15px #778da9, 0 0 25px #415a77; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mo<span>Verse</span></h1>
+        <p data-i18n="header.subtitle">A Web3 Trading Ecosystem Powered by AI & NFTs</p>
+        <div class="lang-toggle">
+            <button id="lang-en" class="button">English</button>
+            <button id="lang-zh" class="button">中文</button>
+        </div>
+    </header>
+
+    <section>
+        <h2 data-i18n="section.about.title">About MoVerse</h2>
+        <p data-i18n="section.about.text">MoVerse is a decentralized platform redefining global trading with blockchain, AI, and NFTs. Launching with creative services in March 2025, we aim to scale to all legal trading scenarios, offering 5% low fees and cutting-edge tech rooted in Eastern "Mo" culture.</p>
+    </section>
+
+    <section>
+        <h2 data-i18n="section.vision.title">Our Vision</h2>
+        <p data-i18n="section.vision.short">Short-term (2025–2027): ¥100M transactions, lead creative trading.</p>
+        <p data-i18n="section.vision.mid">Mid-term (2027–2030): ¥1B transactions, expand to mobility & delivery.</p>
+        <p data-i18n="section.vision.long">Long-term (2030–2035): ¥10B transactions, cornerstone of Web3 economy.</p>
+    </section>
+
+    <section>
+        <h2 data-i18n="section.governance.title">Governance</h2>
+        <p data-i18n="section.governance.text">Mo Council governs MoVerse with a dynamic structure: Legislative Seats (top Mo holders + community votes), Executive Seats (industry reps + users + AI), and Supervisory Seats (audit nodes). AI optimizes proposals, and NFT-based voting ensures transparency.</p>
+    </section>
+
+    <section>
+        <h2 data-i18n="section.token.title">Token: Mo</h2>
+        <p data-i18n="section.token.text">Mo is the ecosystem's token for governance, payments, and incentives. Initial issuance: 15M Mo (50% presale, 25% team, 25% ecosystem). Earn via trading rewards (40%), fiat exchange (40%), and staking (20%). Fees range 3-6%, with 40% burned.</p>
+    </section>
+
+    <section>
+        <h2 data-i18n="section.join.title">Join the Alliance</h2>
+        <p data-i18n="section.join.text">Be an early supporter or contributor: Investors fuel the decentralized future; talent (blockchain devs, AI experts, ops) builds it.</p>
+        <a href="https://discord.gg/GUuHfPyf" class="button" data-i18n="section.join.discord">Join Discord</a>
+        <p data-i18n="section.join.email">Email: [your-email@example.com]</p>
+    </section>
+
+    <footer>
+        <p data-i18n="footer.text">© 2025 MoVerse Alliance | Built by Geeks for a Decentralized World</p>
+    </footer>
+
+    <script>
+        // i18next 初始化
+        i18next.init({
+            lng: localStorage.getItem('language') || 'en', // 默认从本地存储读取，否则英语
+            fallbackLng: 'en',
+            resources: {
+                en: {
+                    translation: {
+                        "title": "MoVerse | Web3 Trading Ecosystem",
+                        "header.subtitle": "A Web3 Trading Ecosystem Powered by AI & NFTs",
+                        "section.about.title": "About MoVerse",
+                        "section.about.text": "MoVerse is a decentralized platform redefining global trading with blockchain, AI, and NFTs. Launching with creative services in March 2025, we aim to scale to all legal trading scenarios, offering 5% low fees and cutting-edge tech rooted in Eastern \"Mo\" culture.",
+                        "section.vision.title": "Our Vision",
+                        "section.vision.short": "Short-term (2025–2027): ¥100M transactions, lead creative trading.",
+                        "section.vision.mid": "Mid-term (2027–2030): ¥1B transactions, expand to mobility & delivery.",
+                        "section.vision.long": "Long-term (2030–2035): ¥10B transactions, cornerstone of Web3 economy.",
+                        "section.governance.title": "Governance",
+                        "section.governance.text": "Mo Council governs MoVerse with a dynamic structure: Legislative Seats (top Mo holders + community votes), Executive Seats (industry reps + users + AI), and Supervisory Seats (audit nodes). AI optimizes proposals, and NFT-based voting ensures transparency.",
+                        "section.token.title": "Token: Mo",
+                        "section.token.text": "Mo is the ecosystem's token for governance, payments, and incentives. Initial issuance: 15M Mo (50% presale, 25% team, 25% ecosystem). Earn via trading rewards (40%), fiat exchange (40%), and staking (20%). Fees range 3-6%, with 40% burned.",
+                        "section.join.title": "Join the Alliance",
+                        "section.join.text": "Be an early supporter or contributor: Investors fuel the decentralized future; talent (blockchain devs, AI experts, ops) builds it.",
+                        "section.join.discord": "Join Discord",
+                        "section.join.email": "Email: [your-email@example.com]",
+                        "footer.text": "© 2025 MoVerse Alliance | Built by Geeks for a Decentralized World"
+                    }
+                },
+                zh: {
+                    translation: {
+                        "title": "墨道交易联盟 | Web3 交易生态系统",
+                        "header.subtitle": "人工智能与 NFT 驱动的 Web3 交易生态系统",
+                        "section.about.title": "关于墨道交易联盟",
+                        "section.about.text": "墨道交易联盟（MoVerse）是一个去中心化平台，通过区块链、人工智能和 NFT 重塑全球交易。2025 年 3 月以创意服务为起点，我们目标扩展至所有合法交易场景，提供 5% 低佣金，融合东方“墨”文化的尖端技术。",
+                        "section.vision.title": "我们的愿景",
+                        "section.vision.short": "短期 (2025–2027)：1 亿日元交易额，引领创意交易。",
+                        "section.vision.mid": "中期 (2027–2030)：10 亿日元交易额，扩展至移动与配送。",
+                        "section.vision.long": "长期 (2030–2035)：100 亿日元交易额，成为 Web3 经济基石。",
+                        "section.governance.title": "治理结构",
+                        "section.governance.text": "墨道议会（Mo Council）以动态结构治理 MoVerse：立规席（顶级 Mo 持有者 + 社区投票）、执行席（行业代表 + 用户 + AI）、监察席（审计节点）。AI 优化提案，NFT 投票确保透明。",
+                        "section.token.title": "代币：Mo（墨）",
+                        "section.token.text": "Mo 是生态的治理、支付和激励代币。初始发行：1500 万 Mo（50% 预售，25% 团队，25% 生态）。获取途径：交易奖励 (40%)、法币兑换 (40%)、质押收益 (20%)。佣金 3-6%，40% 销毁。",
+                        "section.join.title": "加入联盟",
+                        "section.join.text": "成为早期支持者或贡献者：投资者推动去中心化未来；人才（区块链开发、AI 专家、运营）共同构建。",
+                        "section.join.discord": "加入 Discord",
+                        "section.join.email": "邮箱：[your-email@example.com]",
+                        "footer.text": "© 2025 墨道交易联盟 | 由极客为去中心化世界打造"
+                    }
+                }
+            }
+        }, function(err, t) {
+            updateContent();
+        });
+
+        // 更新页面内容
+        function updateContent() {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                element.textContent = i18next.t(element.getAttribute('data-i18n'));
+            });
+            document.title = i18next.t('title'); // 更新标题
+        }
+
+        // 语言切换并保存选择
+        document.getElementById('lang-en').addEventListener('click', () => {
+            i18next.changeLanguage('en', () => {
+                updateContent();
+                localStorage.setItem('language', 'en'); // 保存语言选择
+            });
+        });
+
+        document.getElementById('lang-zh').addEventListener('click', () => {
+            i18next.changeLanguage('zh', () => {
+                updateContent();
+                localStorage.setItem('language', 'zh');
+            });
+        });
+    </script>
+</body>
+</html>
