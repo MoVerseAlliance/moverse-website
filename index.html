@@ -19,6 +19,7 @@
         .subtitle { font-size: 28px; color: #f0f0f0; margin-bottom: 10px; animation: fadeIn 2s ease-in 0.5s; }
         .key-info { font-size: 20px; color: #d4af37; font-family: 'Poppins', sans-serif; animation: fadeIn 2s ease-in 1s; }
         nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(10, 26, 61, 0.9); backdrop-filter: blur(10px); z-index: 1000; padding: 10px 0; }
+        nav .hamburger { display: none; font-size: 24px; background: none; border: none; color: #f0f0f0; cursor: pointer; padding: 10px; }
         nav ul { display: flex; justify-content: center; gap: 20px; list-style: none; }
         nav a { color: #f0f0f0; text-decoration: none; font-size: 16px; padding: 10px 20px; position: relative; transition: color 0.3s ease; }
         nav a:hover { color: #d4af37; }
@@ -62,8 +63,11 @@
             .key-info { font-size: 16px; }
             h2 { font-size: 28px; }
             p { font-size: 14px; }
-            nav ul { flex-direction: column; gap: 10px; }
-            nav a { font-size: 14px; }
+            nav { padding: 5px 0; }
+            nav .hamburger { display: block; }
+            nav ul { display: none; flex-direction: column; gap: 10px; position: absolute; top: 50px; left: 0; width: 100%; background: rgba(10, 26, 61, 0.9); padding: 10px 0; }
+            nav ul.active { display: flex; }
+            nav a { font-size: 14px; display: block; padding: 10px; }
             .governance-card { width: 100%; }
             .culture-card { width: 100%; }
             .transaction-step { padding: 15px; }
@@ -111,6 +115,7 @@
         });
     </script>
     <nav>
+        <button class="hamburger">☰</button>
         <ul>
             <li><a href="#home" data-i18n="nav.home">Home</a></li>
             <li><a href="#vision" data-i18n="section.vision.title">Vision</a></li>
@@ -149,7 +154,6 @@
             </div>
         </section>
         <section id="governance">
-cafeteria">
             <h2 data-i18n="section.governance.title">Governance</h2>
             <p data-i18n="section.governance.text">The Mo Council governs MoVerse with a dynamic, transparent structure: Legislative Seats for rule-making, Executive Seats for operations, and Supervisory Seats for audits. AI enhances decision-making, and NFT voting ensures fairness.</p>
             <div class="governance-cards">
@@ -502,6 +506,11 @@ cafeteria">
                 }
             });
         });
+        const hamburger = document.querySelector('.hamburger');
+        const navUl = document.querySelector('nav ul');
+        hamburger.addEventListener('click', () => {
+            navUl.classList.toggle('active');
+        });
         document.querySelectorAll('nav a').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -509,6 +518,9 @@ cafeteria">
                 const targetElement = document.getElementById(targetId);
                 if (targetElement) {
                     targetElement.scrollIntoView({ behavior: 'smooth' });
+                    if (window.innerWidth <= 768) {
+                        navUl.classList.remove('active');
+                    }
                 }
             });
         });
