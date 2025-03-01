@@ -246,7 +246,7 @@
 </head>
 <body>
     <header>
-        <h1>Mo<span>Verse</span>:did</h1>
+        <h1>Mo<span>Verse</span></h1>
         <p data-i18n="header.subtitle">A Web3 Trading Ecosystem Powered by AI & NFTs</p>
         <p class="key-info" data-i18n="header.key_info">2025 Launch | ¥100M-¥10B Goals | 5% Fees | $2.5T Market</p>
         <div class="controls lang-toggle">
@@ -441,8 +441,7 @@
                     "wallet.not_connected": "Wallet: Not connected",
                     "wallet.meta_mask_not_detected": "Wallet: MetaMask not detected",
                     "wallet.connection_failed": "Wallet: Connection failed",
-                    "wallet.mo_balance": "Mo Balance: <balance>",
-                    "form.success_message": "Thank you, <name>! Your message has been received. Email: <email>, Message: <message>"
+                    "wallet.mo_balance": "Mo Balance: <balance>"
                 }
             },
             zh: {
@@ -503,16 +502,15 @@
                     "wallet.not_connected": "钱包：未连接",
                     "wallet.meta_mask_not_detected": "钱包：未检测到 MetaMask",
                     "wallet.connection_failed": "钱包：连接失败",
-                    "wallet.mo_balance": "Mo 余额：<balance>",
-                    "form.success_message": "感谢你，<name>！你的消息已收到。邮箱：<email>，消息：<message>"
+                    "wallet.mo_balance": "Mo 余额：<balance>"
                 }
             }
         };
 
-        // i18next 初始化，默认中文
+        // i18next 初始化，默认英文
         i18next.init({
-            lng: 'zh',
-            fallbackLng: 'zh',
+            lng: 'en',  // 默认设置为英文
+            fallbackLng: 'en',
             resources: translations
         }, function(err, t) {
             if (err) console.error('i18next init error:', err);
@@ -533,28 +531,28 @@
                     const [attr, i18nKey] = key.match(/\[(.+?)\](.+)/).slice(1);
                     element.setAttribute(attr, i18next.t(i18nKey));
                 } else {
-                    element.textContent = i18next.t(key);
+                    element.innerHTML = i18next.t(key);  // 使用 innerHTML 以支持嵌套标签
                 }
             });
             document.title = i18next.t('title');
             // 更新动态生成的社交统计文本
             const socialStats = document.querySelector('.social-stats p');
             if (socialStats) {
-                socialStats.innerHTML = i18next.t('social_stats.text', { telegramMembers: '<span id="telegram-members">0</span>', discordMembers: '<span id="discord-members">0</span>' });
+                socialStats.innerHTML = i18next.t('social_stats.text');
             }
         }
 
         // 语言切换
         document.getElementById('lang-en').addEventListener('click', () => {
             i18next.changeLanguage('en', (err) => {
-                if (err) console.error('切换到英文失败:', err);
+                if (err) console.error('Switch to English failed:', err);
                 updateContent();
             });
         });
 
         document.getElementById('lang-zh').addEventListener('click', () => {
             i18next.changeLanguage('zh', (err) => {
-                if (err) console.error('切换到中文失败:', err);
+                if (err) console.error('Switch to Chinese failed:', err);
                 updateContent();
             });
         });
@@ -615,21 +613,12 @@
         // 事件绑定
         window.addEventListener('load', () => {
             // 链切换
-            document.getElementById('chain-polygon').addEventListener('click', () => switchChain('Polygon'));
-            document.getElementById('chain-arbitrum').addEventListener('click', () => switchChain('Arbitrum'));
-            document.getElementById('chain-bsc').addEventListener('click', () => switchChain('BSC'));
-
-            // DID 解析（模拟）
-            async function resolveDID() {
-                const did = 'did:ethr:0x1234567890abcdef';
-                const h1 = document.querySelector('h1');
-                if (h1) h1.textContent = `MoVerse:${did}`;
-            }
-            resolveDID();
+            document.getElementById('chain-polygon').addEventListener('click', () => switchChain('polygon'));
+            document.getElementById('chain-arbitrum').addEventListener('click', () => switchChain('arbitrum'));
+            document.getElementById('chain-bsc').addEventListener('click', () => switchChain('bsc'));
 
             // 终端交互
             const terminal = document.getElementById('terminal');
-            console.log('Terminal Element:', terminal); // 调试信息
             if (terminal) {
                 terminal.addEventListener('keydown', async (e) => {
                     if (e.key === 'Enter') {
@@ -652,49 +641,33 @@
                         updateLiveData();
                     }
                 });
-            } else {
-                console.error('Terminal element not found'); // 调试信息
             }
 
             // 切换终端显示
             const toggleTerminal = document.getElementById('toggle-terminal');
-            console.log('Toggle Terminal Button:', toggleTerminal); // 调试信息
             if (toggleTerminal) {
                 toggleTerminal.addEventListener('click', () => {
-                    console.log('Show Terminal button clicked'); // 调试信息
                     const terminalContainer = document.getElementById('terminal-container');
                     terminalContainer.style.display = terminalContainer.style.display === 'block' ? 'none' : 'block';
                 });
-            } else {
-                console.error('Toggle Terminal button not found'); // 调试信息
             }
 
             // 切换 NFT 生成器显示
             const toggleNft = document.getElementById('toggle-nft');
-            console.log('Toggle NFT Button:', toggleNft); // 调试信息
             if (toggleNft) {
                 toggleNft.addEventListener('click', () => {
-                    console.log('Show NFT Generator button clicked'); // 调试信息
                     const nftContainer = document.getElementById('nft-container');
                     nftContainer.style.display = nftContainer.style.display === 'block' ? 'none' : 'block';
                 });
-            } else {
-                console.error('Toggle NFT button not found'); // 调试信息
             }
 
             // IPFS 初始化
-            console.log('IPFS Client Available:', typeof window.IpfsHttpClient !== 'undefined'); // 调试信息
             const ipfs = typeof window.IpfsHttpClient !== 'undefined' ? window.IpfsHttpClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) : null;
-            if (!ipfs) {
-                console.error('IPFS client not available'); // 调试信息
-            }
 
             // NFT 生成
             const generateNft = document.getElementById('generate-nft');
-            console.log('Generate NFT Button:', generateNft); // 调试信息
             if (generateNft) {
                 generateNft.addEventListener('click', async () => {
-                    console.log('Generate NFT button clicked'); // 调试信息
                     const nftDiv = document.getElementById('nft-canvas');
                     nftDiv.innerHTML = '';
                     new p5(sketch => {
@@ -736,23 +709,19 @@
                         };
                     });
                 });
-            } else {
-                console.error('Generate NFT button not found'); // 调试信息
             }
 
             // 钱包连接
             const connectWallet = document.getElementById('connect-wallet');
-            console.log('Connect Wallet Button:', connectWallet); // 调试信息
             if (connectWallet) {
                 connectWallet.addEventListener('click', async () => {
-                    console.log('Connect Wallet button clicked'); // 调试信息
+                    console.log('Connect Wallet button clicked'); // 确认点击事件触发
                     if (typeof window.ethereum !== 'undefined') {
                         try {
                             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                             const address = accounts[0];
-                            document.getElementById('wallet-address').textContent = i18next.t('wallet.address', { address: `${address.slice(0, 6)}...${address.slice(-4)}` });
-                            // 模拟代币余额
-                            const balance = Math.floor(Math.random() * 10000);
+                            document.getElementById('wallet-address').textContent = `Wallet: ${address.slice(0, 6)}...${address.slice(-4)}`;
+                            const balance = Math.floor(Math.random() * 10000); // 模拟余额
                             document.getElementById('mo-balance').textContent = i18next.t('wallet.mo_balance', { balance: balance });
                         } catch (error) {
                             console.error('Wallet connection error:', error);
@@ -760,34 +729,29 @@
                         }
                     } else {
                         document.getElementById('wallet-address').textContent = i18next.t('wallet.meta_mask_not_detected');
+                        alert('Please install MetaMask to connect your wallet.');
                     }
                 });
-            } else {
-                console.error('Connect Wallet button not found'); // 调试信息
             }
 
             // 联系表单
             const contactForm = document.getElementById('contact-form');
-            console.log('Contact Form Element:', contactForm); // 调试信息
             if (contactForm) {
                 contactForm.addEventListener('submit', (e) => {
                     e.preventDefault();
-                    console.log('Form submitted'); // 调试信息
                     const name = document.getElementById('name').value;
                     const email = document.getElementById('email').value;
                     const message = document.getElementById('message').value;
-                    console.log('Form data:', { name, email, message }); // 调试信息
                     const formMessage = document.getElementById('form-message');
                     if (formMessage) {
-                        formMessage.textContent = i18next.t('form.success_message', { name: name, email: email, message: message });
+                        formMessage.textContent = i18next.language === 'en' 
+                            ? `Thank you, ${name}! Your message has been received. Email: ${email}, Message: ${message}`
+                            : `感谢你，${name}！你的消息已收到。邮箱：${email}，消息：${message}`;
                         formMessage.style.display = 'block';
-                    } else {
-                        console.error('Form message element not found'); // 调试信息
+                        setTimeout(() => formMessage.style.display = 'none', 5000); // 5秒后隐藏
                     }
                     contactForm.reset();
                 });
-            } else {
-                console.error('Contact Form not found'); // 调试信息
             }
         });
     </script>
