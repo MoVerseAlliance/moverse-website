@@ -163,6 +163,15 @@ nav a:hover {
     color: #d0d0d0;
     font-weight: bold;
 }
+        .wallet-connect {
+    margin-top: 20px;
+    text-align: center;
+}
+.wallet-connect p {
+    font-size: 16px;
+    color: #778da9;
+    margin: 5px 0;
+}
         @keyframes glow {
             from { text-shadow: 0 0 5px #778da9; }
             to { text-shadow: 0 0 15px #778da9, 0 0 25px #415a77; }
@@ -252,6 +261,11 @@ nav a:hover {
             <div id="nft-canvas"></div>
             <p id="ipfs-hash"></p>
         </div>
+        <div class="wallet-connect">
+        <button id="connect-wallet" class="button">Connect Wallet</button>
+        <p id="wallet-address">Wallet: Not connected</p>
+        <p id="mo-balance">Mo Balance: 0</p>
+</div>
     </section>
     <section>
     <h2 data-i18n="section.roadmap.title">Our Roadmap</h2>
@@ -559,6 +573,26 @@ nav a:hover {
                     });
                 });
             }
+           const connectWallet = document.getElementById('connect-wallet');
+if (connectWallet) {
+    connectWallet.addEventListener('click', async () => {
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const address = accounts[0];
+                document.getElementById('wallet-address').textContent = `Wallet: ${address.slice(0, 6)}...${address.slice(-4)}`;
+                // 模拟代币余额
+                const balance = Math.floor(Math.random() * 10000);
+                document.getElementById('mo-balance').textContent = `Mo Balance: ${balance}`;
+            } catch (error) {
+                console.error('Wallet connection error:', error);
+                document.getElementById('wallet-address').textContent = 'Wallet: Connection failed';
+            }
+        } else {
+            document.getElementById('wallet-address').textContent = 'Wallet: MetaMask not detected';
+        }
+    });
+} 
         });
     </script>
 </body>
