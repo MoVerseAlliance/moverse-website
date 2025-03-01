@@ -21,9 +21,10 @@
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         .hero h1 { font-size: 60px; color: #d4af37; font-family: 'Noto Serif SC', serif; text-shadow: 0 0 15px rgba(212, 175, 55, 0.5); animation: fadeIn 2s; }
         .hero p { font-size: 24px; max-width: 800px; margin: 20px 0; animation: fadeIn 2s 0.5s; opacity: 0; animation-fill-mode: forwards; }
-        .button { padding: 14px 28px; background: #d4af37; color: #0a1a3d; text-decoration: none; border-radius: 8px; transition: background 0.3s, transform 0.3s; font-size: 18px; }
+        .quick-nav { display: flex; gap: 20px; margin-top: 20px; }
+        .button { padding: 14px 28px; background: linear-gradient(45deg, #d4af37, #e6c04b); color: #0a1a3d; text-decoration: none; border-radius: 8px; transition: background 0.3s, transform 0.3s; font-size: 18px; }
         .button:hover { background: #f0f0f0; transform: scale(1.05); }
-        section { padding: 100px 20px; position: relative; }
+        section { padding: 100px 20px; position: relative; border-bottom: 1px solid rgba(212, 175, 55, 0.2); }
         h2 { font-size: 48px; color: #d4af37; font-family: 'Noto Serif SC', serif; text-align: center; margin-bottom: 60px; text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
         .timeline { display: flex; flex-direction: column; gap: 40px; max-width: 1000px; margin: 0 auto; }
         .card { background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 15px; border: 1px solid rgba(212, 175, 55, 0.2); transition: transform 0.3s, box-shadow 0.3s; }
@@ -42,30 +43,43 @@
         .token-table th, .token-table td { padding: 15px; border: 1px solid #d4af37; transition: background 0.3s; }
         .token-table th { background: rgba(212, 175, 55, 0.1); }
         .token-table tr:hover td { background: rgba(212, 175, 55, 0.2); }
+        .chain-icons { display: flex; gap: 20px; margin-top: 20px; }
+        .chain-icon { width: 50px; height: 50px; background: #fff; border-radius: 50%; transition: transform 0.3s; }
+        .chain-icon:hover { transform: scale(1.2); }
+        .chain-icon span { display: none; position: absolute; background: #0a1a3d; padding: 5px 10px; border-radius: 5px; top: -40px; }
+        .chain-icon:hover span { display: block; }
         .transaction-flow { max-width: 1000px; margin: 0 auto; }
         .flow-steps { display: flex; flex-direction: column; gap: 30px; }
         .flow-card { position: relative; padding-bottom: 20px; }
         .flow-progress { height: 6px; background: #d4af37; width: 0; transition: width 1s; }
         #nft-preview { display: none; text-align: center; margin-top: 30px; }
-        #nft-image { max-width: 250px; border: 3px solid #d4af37; border-radius: 10px; }
+        #nft-image { max-width: 250px; border: 3px solid #d4af37; border-radius: 10px; cursor: pointer; transition: transform 0.3s; }
+        #nft-image:hover { transform: scale(1.2); }
         .user-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
         .user-card { text-align: center; }
         .user-card h4 { font-size: 22px; color: #d4af37; margin-bottom: 10px; }
+        .user-toggle { text-align: center; margin-bottom: 20px; }
+        .user-toggle button { padding: 10px 20px; margin: 0 10px; background: #d4af37; color: #0a1a3d; border: none; border-radius: 5px; cursor: pointer; }
+        .user-toggle button.active { background: #e6c04b; }
         .roadmap-timeline { max-width: 800px; margin: 0 auto; position: relative; }
         .roadmap-timeline::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 4px; background: #d4af37; transform: translateX(-50%); }
         .roadmap-card { position: relative; margin: 20px 0; padding: 20px; width: 45%; }
         .roadmap-card:nth-child(odd) { margin-left: 55%; }
         .roadmap-card:nth-child(even) { margin-right: 55%; text-align: right; }
         .culture-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; max-width: 1200px; margin: 0 auto; }
+        .culture-example { font-size: 14px; color: #d4af37; margin-top: 10px; }
         .join-section { text-align: center; }
         .join-buttons { display: flex; justify-content: center; gap: 30px; margin-top: 30px; }
         footer { padding: 50px 20px; background: rgba(10, 26, 61, 0.85); text-align: center; font-size: 18px; color: #ffffff; }
         footer a { display: inline-block; margin: 15px; color: #e6c04b; text-decoration: none; font-weight: 600; transition: color 0.3s; }
         footer a:hover { color: #ffffff; }
+        .social-stats { margin-top: 20px; font-size: 16px; }
+        .back-to-top { position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background: #d4af37; color: #0a1a3d; border-radius: 5px; display: none; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @media (max-width: 768px) {
             .hero h1 { font-size: 40px; }
             .hero p { font-size: 18px; }
+            .quick-nav { flex-direction: column; gap: 10px; }
             h2 { font-size: 36px; }
             nav .hamburger { display: block; }
             nav ul { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; width: 100%; background: rgba(10, 26, 61, 0.95); }
@@ -83,7 +97,8 @@
             let particles = [];
             sketch.setup = () => {
                 sketch.createCanvas(window.innerWidth, window.innerHeight);
-                for (let i = 0; i < 150; i++) {
+                let particleCount = window.innerWidth > 768 ? 150 : 75; // 动态调整粒子数
+                for (let i = 0; i < particleCount; i++) {
                     particles.push({
                         x: Math.random() * sketch.width,
                         y: Math.random() * sketch.height,
@@ -124,6 +139,7 @@
             <li><a href="#users" data-i18n="section.users.title">Users</a></li>
             <li><a href="#roadmap" data-i18n="section.roadmap.title">Roadmap</a></li>
             <li><a href="#culture" data-i18n="section.culture.title">Culture</a></li>
+            <li><a href="#legal" data-i18n="section.legal.title">Legal</a></li>
             <li><a href="#join" data-i18n="section.join.title">Join</a></li>
             <li><button id="lang-en" data-i18n="button.lang_en">EN</button></li>
             <li><button id="lang-zh" data-i18n="button.lang_zh">ZH</button></li>
@@ -133,7 +149,11 @@
         <section id="home" class="hero">
             <h1 data-i18n="title">MoVerse</h1>
             <p data-i18n="header.subtitle">A decentralized global trading ecosystem powered by blockchain, AI, and NFTs, inspired by Eastern "Mo" culture.</p>
-            <a href="#join" class="button" data-i18n="section.join.title">Join the Alliance</a>
+            <div class="quick-nav">
+                <a href="#vision" class="button" data-i18n="section.vision.title">Vision</a>
+                <a href="#transaction" class="button" data-i18n="section.transaction.title">Transaction</a>
+                <a href="#join" class="button" data-i18n="section.join.title">Join</a>
+            </div>
         </section>
         <section id="vision">
             <h2 data-i18n="section.vision.title">Our Vision</h2>
@@ -203,6 +223,11 @@
                         <tr><th data-i18n="section.token.consume">Consumption</th><td data-i18n="section.token.consume_text">Proposals (50/500 Mo), fees (3-6%, 40% burned), arbitration (5%+), cross-scenario (0.3%)</td></tr>
                         <tr><th data-i18n="section.token.control">Inflation Control</th><td data-i18n="section.token.control_text">1.5-4% issuance (AI-adjusted), 40% fee burn</td></tr>
                     </table>
+                    <div class="chain-icons">
+                        <div class="chain-icon" style="background: url('https://via.placeholder.com/50?text=P') center/cover;"><span>Polygon: Low Gas Fees</span></div>
+                        <div class="chain-icon" style="background: url('https://via.placeholder.com/50?text=A') center/cover;"><span>Arbitrum: High Throughput</span></div>
+                        <div class="chain-icon" style="background: url('https://via.placeholder.com/50?text=B') center/cover;"><span>BSC: Fast Transactions</span></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -245,7 +270,11 @@
         </section>
         <section id="users">
             <h2 data-i18n="section.users.title">User Ecosystem</h2>
-            <div class="user-grid">
+            <div class="user-toggle">
+                <button id="creative-btn" class="active" data-i18n="section.users.creative" onclick="toggleUsers('creative')">Creative Services</button>
+                <button id="extended-btn" data-i18n="section.users.extended" onclick="toggleUsers('extended')">Extended Scenarios</button>
+            </div>
+            <div class="user-grid" id="creative-users">
                 <div class="user-card card">
                     <h4 data-i18n="section.users.creator_novice">Novice Creator</h4>
                     <p data-i18n="section.users.creator_novice_text">Newly registered, tasks ≤ ¥700, Qingmo badge.</p>
@@ -261,6 +290,20 @@
                 <div class="user-card card">
                     <h4 data-i18n="section.users.creator_master">Mo Saint</h4>
                     <p data-i18n="section.users.creator_master_text">¥35M+, recognized, 2.5% fees, permanent seat.</p>
+                </div>
+            </div>
+            <div class="user-grid" id="extended-users" style="display: none;">
+                <div class="user-card card">
+                    <h4 data-i18n="section.users.service_novice">Novice Service Provider</h4>
+                    <p data-i18n="section.users.service_novice_text">Newly registered, tasks ≤ ¥200, basic mobility.</p>
+                </div>
+                <div class="user-card card">
+                    <h4 data-i18n="section.users.service_mid">Mid-tier Service Provider</h4>
+                    <p data-i18n="section.users.service_mid_text">¥5000+, 85%+ rating, delivery tasks ≤ ¥500.</p>
+                </div>
+                <div class="user-card card">
+                    <h4 data-i18n="section.users.service_high">High-tier Service Provider</h4>
+                    <p data-i18n="section.users.service_high_text">¥5M+, 90%+ rating, logistics support, 3% fees.</p>
                 </div>
             </div>
         </section>
@@ -295,11 +338,19 @@
                 <div class="card">
                     <h3 data-i18n="section.culture.bazaar_title">Mo Bazaar (墨肆)</h3>
                     <p data-i18n="section.culture.bazaar_text">An open platform connecting graded creators (Novice to Mo Saint) with employers via AI matching, fostering a dynamic creative economy.</p>
+                    <div class="culture-example" data-i18n="section.culture.bazaar_example">Example: Novice matched to ¥700 UI task in 8 minutes.</div>
                 </div>
                 <div class="card">
                     <h3 data-i18n="section.culture.contest_title">Mo Contest (墨战)</h3>
                     <p data-i18n="section.culture.contest_text">Monthly creative challenges with a 5000-8000 Mo prize pool, judged by AI, rewarding top performers with NFT achievements.</p>
+                    <div class="culture-example" data-i18n="section.culture.contest_example">Last Theme: "Future Mobility Design" - Winner NFT: #005</div>
                 </div>
+            </div>
+        </section>
+        <section id="legal">
+            <h2 data-i18n="section.legal.title">Legal & Technical Framework</h2>
+            <div class="card">
+                <p data-i18n="section.legal.text">MoVerse operates under Mo Foundation (Cayman) for governance and Mo Payment (Singapore) for transactions, ensuring compliance. Built on Polygon, Arbitrum, and BSC with IPFS storage for decentralization.</p>
             </div>
         </section>
         <section id="join" class="join-section">
@@ -313,6 +364,7 @@
         </section>
         <footer>
             <p data-i18n="footer.text">© 2025 MoVerse Alliance | Built for a Decentralized World</p>
+            <div class="social-stats" data-i18n="footer.stats">Community: Telegram <span id="telegram-members">500+</span> | Discord <span id="discord-members">300+</span></div>
             <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/whitepaper_en.pdf" target="_blank" data-i18n="footer.whitepaper_en">Whitepaper (EN)</a>
             <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/whitepaper_cn.pdf" target="_blank" data-i18n="footer.whitepaper_cn">Whitepaper (CN)</a>
             <a href="https://discord.gg/GUuHfPyf" target="_blank" data-i18n="footer.discord">Discord</a>
@@ -321,6 +373,7 @@
             <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/moverse_project_details_cn.pdf" target="_blank" data-i18n="footer.project_details_cn">Project Details-cn</a>
         </footer>
     </div>
+    <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Top</button>
     <script>
         i18next.init({
             lng: 'en',
@@ -370,6 +423,8 @@
                         "section.transaction.step5_text": "NFT minted (#001, ¥1800, 2025-03-01) as proof, tradable at 40 Mo or used as credit.",
                         "section.transaction.nft_info": "Transaction ID: #001 | Value: ¥1800 | Date: 2025-03-01",
                         "section.users.title": "User Ecosystem",
+                        "section.users.creative": "Creative Services",
+                        "section.users.extended": "Extended Scenarios",
                         "section.users.creator_novice": "Novice Creator",
                         "section.users.creator_novice_text": "Newly registered, tasks ≤ ¥700, Qingmo badge.",
                         "section.users.creator_mid": "Mid-tier Creator",
@@ -378,6 +433,12 @@
                         "section.users.creator_high_text": "¥7M+, 7+ originals, 4% fees, rule-making rights.",
                         "section.users.creator_master": "Mo Saint",
                         "section.users.creator_master_text": "¥35M+, recognized, 2.5% fees, permanent seat.",
+                        "section.users.service_novice": "Novice Service Provider",
+                        "section.users.service_novice_text": "Newly registered, tasks ≤ ¥200, basic mobility.",
+                        "section.users.service_mid": "Mid-tier Service Provider",
+                        "section.users.service_mid_text": "¥5000+, 85%+ rating, delivery tasks ≤ ¥500.",
+                        "section.users.service_high": "High-tier Service Provider",
+                        "section.users.service_high_text": "¥5M+, 90%+ rating, logistics support, 3% fees.",
                         "section.roadmap.title": "Implementation Roadmap",
                         "section.roadmap.q1_title": "Q1 2025",
                         "section.roadmap.q1": "Whitepaper release, community building, initial partnerships. Target: 5000 users, ¥100K.",
@@ -392,8 +453,12 @@
                         "section.culture.title": "Cultural Incentives",
                         "section.culture.bazaar_title": "Mo Bazaar (墨肆)",
                         "section.culture.bazaar_text": "An open platform connecting graded creators (Novice to Mo Saint) with employers via AI matching, fostering a dynamic creative economy.",
+                        "section.culture.bazaar_example": "Example: Novice matched to ¥700 UI task in 8 minutes.",
                         "section.culture.contest_title": "Mo Contest (墨战)",
                         "section.culture.contest_text": "Monthly creative challenges with a 5000-8000 Mo prize pool, judged by AI, rewarding top performers with NFT achievements.",
+                        "section.culture.contest_example": "Last Theme: 'Future Mobility Design' - Winner NFT: #005",
+                        "section.legal.title": "Legal & Technical Framework",
+                        "section.legal.text": "MoVerse operates under Mo Foundation (Cayman) for governance and Mo Payment (Singapore) for transactions, ensuring compliance. Built on Polygon, Arbitrum, and BSC with IPFS storage for decentralization.",
                         "section.join.title": "Join the Alliance",
                         "section.join.text": "Be part of the decentralized future: investors provide fuel, talent (blockchain devs, AI experts, ops) builds MoVerse. Shape Web3 trading with us.",
                         "section.join.discord": "Join Discord",
@@ -403,6 +468,7 @@
                         "button.lang_en": "EN",
                         "button.lang_zh": "ZH",
                         "footer.text": "© 2025 MoVerse Alliance | Built for a Decentralized World",
+                        "footer.stats": "Community: Telegram <span id='telegram-members'>500+</span> | Discord <span id='discord-members'>300+</span>",
                         "footer.whitepaper_en": "Whitepaper (EN)",
                         "footer.whitepaper_cn": "Whitepaper (CN)",
                         "footer.discord": "Discord",
@@ -455,6 +521,8 @@
                         "section.transaction.step5_text": "NFT生成（#001，¥1800，2025-03-01）作为证明，可交易（底价40 Mo）或用作信用。",
                         "section.transaction.nft_info": "交易ID：#001 | 价值：¥1800 | 日期：2025-03-01",
                         "section.users.title": "用户生态",
+                        "section.users.creative": "创意服务",
+                        "section.users.extended": "扩展场景",
                         "section.users.creator_novice": "新手创作者",
                         "section.users.creator_novice_text": "新注册，任务≤¥700，青墨徽章。",
                         "section.users.creator_mid": "中阶创作者",
@@ -463,6 +531,12 @@
                         "section.users.creator_high_text": "¥700万+，原创7+，佣金4%，规则制定权。",
                         "section.users.creator_master": "墨圣",
                         "section.users.creator_master_text": "¥3500万+，获认可，佣金2.5%，永久席位。",
+                        "section.users.service_novice": "新手服务者",
+                        "section.users.service_novice_text": "新注册，任务≤¥200，基础移动服务。",
+                        "section.users.service_mid": "中阶服务者",
+                        "section.users.service_mid_text": "¥5000+，好评率85%+，配送任务≤¥500。",
+                        "section.users.service_high": "高阶服务者",
+                        "section.users.service_high_text": "¥500万+，好评率90%+，物流支持，佣金3%。",
                         "section.roadmap.title": "实施路线图",
                         "section.roadmap.q1_title": "2025年第一季度",
                         "section.roadmap.q1": "发布白皮书，建立社区，初步合作。目标：5000用户，¥10万。",
@@ -477,8 +551,12 @@
                         "section.culture.title": "文化激励",
                         "section.culture.bazaar_title": "墨肆",
                         "section.culture.bazaar_text": "开放平台，通过AI匹配连接分级创作者（新手至墨圣）与雇主，打造动态创意经济。",
+                        "section.culture.bazaar_example": "示例：新手在8分钟内匹配到¥700 UI任务。",
                         "section.culture.contest_title": "墨战",
                         "section.culture.contest_text": "月度创意挑战，奖池5000-8000 Mo，AI评判，优胜者获NFT成就。",
+                        "section.culture.contest_example": "上期主题：‘未来移动设计’ - 获胜NFT：#005",
+                        "section.legal.title": "法律与技术框架",
+                        "section.legal.text": "墨道交易联盟在Mo基金会（开曼）和Mo支付（新加坡）下运营，确保合规性。基于Polygon、Arbitrum和BSC构建，IPFS存储实现去中心化。",
                         "section.join.title": "加入联盟",
                         "section.join.text": "成为去中心化未来的一部分：投资者提供动力，人才（区块链开发、AI专家、运营）共建MoVerse。与我们一起塑造Web3交易。",
                         "section.join.discord": "加入 Discord",
@@ -488,6 +566,7 @@
                         "button.lang_en": "英文",
                         "button.lang_zh": "中文",
                         "footer.text": "© 2025 墨道交易联盟 | 为去中心化世界打造",
+                        "footer.stats": "社区：Telegram <span id='telegram-members'>500+</span> | Discord <span id='discord-members'>300+</span>",
                         "footer.whitepaper_en": "白皮书（英文）",
                         "footer.whitepaper_cn": "白皮书（中文）",
                         "footer.discord": "Discord",
@@ -529,6 +608,27 @@
                 document.getElementById(this.getAttribute('href').substring(1)).scrollIntoView({ behavior: 'smooth' });
                 if (window.innerWidth <= 768) navUl.classList.remove('active');
             });
+        });
+        function toggleUsers(type) {
+            const creative = document.getElementById('creative-users');
+            const extended = document.getElementById('extended-users');
+            const creativeBtn = document.getElementById('creative-btn');
+            const extendedBtn = document.getElementById('extended-btn');
+            if (type === 'creative') {
+                creative.style.display = 'grid';
+                extended.style.display = 'none';
+                creativeBtn.classList.add('active');
+                extendedBtn.classList.remove('active');
+            } else {
+                creative.style.display = 'none';
+                extended.style.display = 'grid';
+                creativeBtn.classList.remove('active');
+                extendedBtn.classList.add('active');
+            }
+        }
+        window.addEventListener('scroll', () => {
+            const backToTop = document.querySelector('.back-to-top');
+            backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
         });
     </script>
 </body>
