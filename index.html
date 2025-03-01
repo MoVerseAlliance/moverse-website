@@ -3,353 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="title">墨道交易联盟 | Web3 交易生态系统</title>
-    <!-- Google Fonts -->
+    <title data-i18n="title">MoVerse | Web3 Trading Ecosystem</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
-    <!-- i18next 库 -->
     <script src="https://unpkg.com/i18next@23.11.2/dist/umd/i18next.min.js"></script>
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <!-- p5.js 库（用于背景和动画效果） -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #0a1a3d;
-            color: #f0f0f0;
-            line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
-        }
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            opacity: 0.3;
-        }
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        header {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            position: relative;
-        }
-        h1 {
-            font-size: 60px;
-            color: #d4af37;
-            font-family: 'Noto Serif SC', serif;
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-            margin-bottom: 20px;
-            animation: fadeIn 2s ease-in;
-        }
-        h1 span {
-            color: #f0f0f0;
-        }
-        .subtitle {
-            font-size: 28px;
-            color: #f0f0f0;
-            margin-bottom: 10px;
-            animation: fadeIn 2s ease-in 0.5s;
-        }
-        .key-info {
-            font-size: 20px;
-            color: #d4af37;
-            font-family: 'Poppins', sans-serif;
-            animation: fadeIn 2s ease-in 1s;
-        }
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(10, 26, 61, 0.9);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 10px 0;
-        }
-        nav ul {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            list-style: none;
-        }
-        nav a {
-            color: #f0f0f0;
-            text-decoration: none;
-            font-size: 16px;
-            padding: 10px 20px;
-            position: relative;
-            transition: color 0.3s ease;
-        }
-        nav a:hover {
-            color: #d4af37;
-        }
-        nav a::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: #d4af37;
-            transition: all 0.3s ease;
-        }
-        nav a:hover::before {
-            width: 100%;
-            left: 0;
-        }
-        nav button {
-            padding: 10px 20px;
-            background: transparent;
-            color: #f0f0f0;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            transition: color 0.3s ease;
-        }
-        nav button:hover {
-            color: #d4af37;
-        }
-        section {
-            padding: 100px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            margin-bottom: 40px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.5s ease;
-        }
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        h2 {
-            font-size: 40px;
-            color: #d4af37;
-            font-family: 'Noto Serif SC', serif;
-            margin-bottom: 30px;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-        }
-        p {
-            font-size: 16px;
-            color: #f0f0f0;
-            max-width: 800px;
-            margin: 0 auto 20px;
-        }
-        .vision-details {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .market-data {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        .market-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            width: 300px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .market-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-        }
-        .market-card h3 {
-            font-size: 20px;
-            color: #d4af37;
-            margin-bottom: 10px;
-        }
-        .vision-timeline {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .timeline-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .timeline-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-        }
-        .timeline-item h3 {
-            font-size: 22px;
-            color: #d4af37;
-            margin-bottom: 10px;
-        }
-        .governance-details {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .governance-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .governance-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-        }
-        .governance-card h3 {
-            font-size: 22px;
-            color: #d4af37;
-            margin-bottom: 15px;
-        }
-        .governance-card ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        .governance-card ul li {
-            margin-bottom: 10px;
-        }
-        .token-details {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .token-flowchart {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .token-flowchart canvas {
-            width: 100%;
-            height: auto;
-        }
-        .transaction-simulation {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .transaction-step {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .transaction-step:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-        }
-        .transaction-step h3 {
-            font-size: 20px;
-            color: #d4af37;
-            margin-bottom: 10px;
-        }
-        .transaction-step p {
-            margin-bottom: 10px;
-        }
-        #simulate-transaction {
-            margin-top: 20px;
-        }
-        #nft-preview {
-            margin-top: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 20px;
-            border-radius: 10px;
-            display: none;
-        }
-        #nft-preview img {
-            width: 100%;
-            max-width: 200px;
-            border: 2px solid #d4af37;
-            border-radius: 5px;
-        }
-        .roadmap-details {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .culture-details {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .culture-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .culture-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-        }
-        .culture-card h3 {
-            font-size: 22px;
-            color: #d4af37;
-            margin-bottom: 15px;
-        }
-        .culture-card ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        .culture-card ul li {
-            margin-bottom: 10px;
-        }
-        .join-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .button {
-            padding: 12px 24px;
-            background: #d4af37;
-            color: #0a1a3d;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s ease, transform 0.3s ease;
-        }
-        .button:hover {
-            background: #f0f0f0;
-            transform: translateY(-3px);
-        }
-        footer {
-            padding: 20px;
-            background: rgba(10, 26, 61, 0.9);
-            text-align: center;
-            font-size: 14px;
-            color: #f0f0f0;
-        }
-        footer a {
-            color: #d4af37;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        footer a:hover {
-            color: #f0f0f0;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #0a1a3d; color: #f0f0f0; line-height: 1.6; overflow-x: hidden; position: relative; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
+        .container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; }
+        h1 { font-size: 60px; color: #d4af37; font-family: 'Noto Serif SC', serif; text-shadow: 0 0 15px rgba(212, 175, 55, 0.5); margin-bottom: 20px; animation: fadeIn 2s ease-in; }
+        h1 span { color: #f0f0f0; }
+        .subtitle { font-size: 28px; color: #f0f0f0; margin-bottom: 10px; animation: fadeIn 2s ease-in 0.5s; }
+        .key-info { font-size: 20px; color: #d4af37; font-family: 'Poppins', sans-serif; animation: fadeIn 2s ease-in 1s; }
+        nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(10, 26, 61, 0.9); backdrop-filter: blur(10px); z-index: 1000; padding: 10px 0; }
+        nav ul { display: flex; justify-content: center; gap: 20px; list-style: none; }
+        nav a { color: #f0f0f0; text-decoration: none; font-size: 16px; padding: 10px 20px; position: relative; transition: color 0.3s ease; }
+        nav a:hover { color: #d4af37; }
+        nav a::before { content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 2px; background: #d4af37; transition: all 0.3s ease; }
+        nav a:hover::before { width: 100%; left: 0; }
+        section { padding: 100px 20px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; margin-bottom: 40px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); opacity: 0; transform: translateY(50px); transition: all 0.5s ease; }
+        section.visible { opacity: 1; transform: translateY(0); }
+        h2 { font-size: 40px; color: #d4af37; font-family: 'Noto Serif SC', serif; margin-bottom: 30px; text-align: center; text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
+        p { font-size: 16px; color: #f0f0f0; max-width: 800px; margin: 0 auto 20px; }
+        .vision-timeline, .roadmap-timeline { display: flex; flex-direction: column; gap: 20px; max-width: 800px; margin: 0 auto; }
+        .timeline-item { background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 10px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .timeline-item:hover { transform: translateY(-5px); box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
+        .timeline-item h3 { font-size: 22px; color: #d4af37; margin-bottom: 10px; }
+        .governance-cards { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .governance-card { background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 10px; width: 300px; transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; }
+        .governance-card:hover { transform: translateY(-5px); box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
+        .governance-card h3 { font-size: 20px; color: #d4af37; margin-bottom: 10px; }
+        .governance-details { display: none; margin-top: 20px; background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; }
+        .governance-details.active { display: block; }
+        .token-flowchart { width: 100%; max-width: 800px; margin: 0 auto; }
+        .transaction-simulation { max-width: 800px; margin: 0 auto; text-align: center; }
+        .transaction-step { background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .transaction-step:hover { transform: translateY(-5px); box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
+        .transaction-step h3 { font-size: 20px; color: #d4af37; margin-bottom: 10px; }
+        .button { padding: 12px 24px; background: #d4af37; color: #0a1a3d; text-decoration: none; border-radius: 5px; transition: background 0.3s ease, transform 0.3s ease; }
+        .button:hover { background: #f0f0f0; transform: translateY(-3px); }
+        #nft-preview { margin-top: 20px; background: rgba(255, 255, 255, 0.2); padding: 20px; border-radius: 10px; display: none; }
+        #nft-image { width: 100%; max-width: 200px; border: 2px solid #d4af37; border-radius: 5px; }
+        .culture-cards { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .culture-card { background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 10px; width: 300px; transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; }
+        .culture-card:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
+        .culture-card h3 { font-size: 20px; color: #d4af37; margin-bottom: 10px; }
+        .join-buttons { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
+        footer { padding: 20px; background: rgba(10, 26, 61, 0.9); text-align: center; font-size: 14px; color: #f0f0f0; }
+        footer a { color: #d4af37; text-decoration: none; margin: 0 10px; }
+        footer a:hover { color: #f0f0f0; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @media (max-width: 768px) {
             h1 { font-size: 36px; }
             .subtitle { font-size: 20px; }
@@ -357,17 +63,15 @@
             h2 { font-size: 28px; }
             p { font-size: 14px; }
             nav ul { flex-direction: column; gap: 10px; }
-            nav a, nav button { font-size: 14px; }
-            .market-card { width: 100%; }
+            nav a { font-size: 14px; }
             .governance-card { width: 100%; }
             .culture-card { width: 100%; }
-            .join-buttons { flex-direction: column; }
             .transaction-step { padding: 15px; }
+            .join-buttons { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <!-- 动态水墨背景 -->
     <script>
         new p5(sketch => {
             let particles = [];
@@ -388,7 +92,6 @@
                 sketch.clear();
                 mouse.x = sketch.mouseX;
                 mouse.y = sketch.mouseY;
-
                 particles.forEach((p, i) => {
                     p.alpha -= p.decay;
                     if (p.alpha <= 0) {
@@ -407,235 +110,160 @@
             };
         });
     </script>
-
     <nav>
         <ul>
             <li><a href="#home" data-i18n="nav.home">Home</a></li>
             <li><a href="#vision" data-i18n="section.vision.title">Vision</a></li>
             <li><a href="#governance" data-i18n="section.governance.title">Governance</a></li>
-            <li><a href="#token" data-i18n="section.token.title">Token: Mo</a></li>
-            <li><a href="#transaction" data-i18n="section.transaction.title">Transaction Simulation</a></li>
+            <li><a href="#token" data-i18n="section.token.title">Token</a></li>
+            <li><a href="#transaction" data-i18n="section.transaction.title">Transaction</a></li>
             <li><a href="#roadmap" data-i18n="section.roadmap.title">Roadmap</a></li>
-            <li><a href="#culture" data-i18n="section.culture.title">Cultural Incentives</a></li>
+            <li><a href="#culture" data-i18n="section.culture.title">Culture</a></li>
             <li><a href="#join" data-i18n="section.join.title">Join</a></li>
-            <li><button id="lang-en">EN</button></li>
-            <li><button id="lang-zh">ZH</button></li>
+            <li><button id="lang-en" data-i18n="button.lang_en">EN</button></li>
+            <li><button id="lang-zh" data-i18n="button.lang_zh">ZH</button></li>
         </ul>
     </nav>
-
     <div class="container">
         <header id="home">
-            <h1 data-i18n="title">MoVerse</h1>
+            <h1 data-i18n="title">Mo<span data-i18n="title_span">Verse</span></h1>
             <p class="subtitle" data-i18n="header.subtitle">A Web3 Trading Ecosystem Powered by AI & NFTs</p>
             <p class="key-info" data-i18n="header.key_info">2025 Launch | ¥100M-¥10B Goals | 5% Fees | $2.5T Market</p>
         </header>
-
         <section id="vision">
             <h2 data-i18n="section.vision.title">Our Vision</h2>
-            <div class="vision-details">
-                <p data-i18n="section.about.text">MoVerse is a decentralized platform redefining global trading with blockchain, AI, and NFTs. Launching with creative services in March 2025, we aim to scale to all legal trading scenarios, offering 5% low fees and cutting-edge tech rooted in Eastern "Mo" culture.</p>
-                <h3 data-i18n="section.vision.markets">Market Prospects</h3>
-                <div class="market-data">
-                    <div class="market-card">
-                        <h3 data-i18n="section.vision.markets.creative">Creative Services Market</h3>
-                        <p data-i18n="section.vision.markets.creative.desc">Expected global market size of $2.5T in 2025, with an 8% annual growth rate. Targeting 10M designers and 5M employers, capturing 1/3 of the market, with a transaction goal of ¥100M.</p>
-                    </div>
-                    <div class="market-card">
-                        <h3 data-i18n="section.vision.markets.mobility">Mobility Services Market</h3>
-                        <p data-i18n="section.vision.markets.mobility.desc">Global mobility market exceeds $100B, targeting ¥50B in annual transactions, capturing 5%. Low-cost entry at 3% commission, competing with platforms like Uber.</p>
-                    </div>
-                    <div class="market-card">
-                        <h3 data-i18n="section.vision.markets.delivery">Delivery Services Market</h3>
-                        <p data-i18n="section.vision.markets.delivery.desc">Food delivery market surpasses $150B, targeting ¥80B, capturing 5%. AI optimization improves delivery efficiency by 15%.</p>
-                    </div>
+            <p data-i18n="section.vision.text">MoVerse aims to redefine global trading through a decentralized ecosystem built on blockchain, AI, and NFTs. Starting with creative services in March 2025, we target a $2.5T market with 5% low fees, scaling to all legal trading scenarios by 2035.</p>
+            <div class="vision-timeline">
+                <div class="timeline-item">
+                    <h3 data-i18n="section.vision.short_title">Short-term (2025–2027)</h3>
+                    <p data-i18n="section.vision.short">Become the leading DAO in creative service trading with ¥100M annual transactions. Leverage AI-driven matching and low 5% fees to attract 10M designers and 5M employers, disrupting platforms like Fiverr (20% fees).</p>
                 </div>
-                <h3 data-i18n="section.vision.goals">Goals and Timeline</h3>
-                <div class="vision-timeline">
-                    <div class="timeline-item">
-                        <h3 data-i18n="section.vision.short.title">Short-term (2025–2027)</h3>
-                        <p data-i18n="section.vision.short">Become the leading DAO in creative service trading, targeting ¥100M in annual transactions.</p>
-                    </div>
-                    <div class="timeline-item">
-                        <h3 data-i18n="section.vision.mid.title">Mid-term (2027–2030)</h3>
-                        <p data-i18n="section.vision.mid">Expand to mobility and delivery services, achieving ¥1B in annual transactions.</p>
-                    </div>
-                    <div class="timeline-item">
-                        <h3 data-i18n="section.vision.long.title">Long-term (2030–2035)</h3>
-                        <p data-i18n="section.vision.long">Cover all legal trading scenarios, becoming a cornerstone of the Web3 economy with ¥10B in annual transactions.</p>
-                    </div>
+                <div class="timeline-item">
+                    <h3 data-i18n="section.vision.mid_title">Mid-term (2027–2030)</h3>
+                    <p data-i18n="section.vision.mid">Expand into mobility and delivery services, targeting ¥1B annual transactions. Integrate cross-scenario synergies (e.g., mobility + delivery) using AI optimization, capturing 5% of the $150B delivery market.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 data-i18n="section.vision.long_title">Long-term (2030–2035)</h3>
+                    <p data-i18n="section.vision.long">Achieve a "boundaryless trading" ecosystem covering all legal scenarios (e.g., logistics, leasing), with ¥10B annual transactions. Position MoVerse as a Web3 cornerstone, rivaling centralized giants with NFT-backed trust.</p>
                 </div>
             </div>
         </section>
-
         <section id="governance">
+cafeteria">
             <h2 data-i18n="section.governance.title">Governance</h2>
-            <div class="governance-details">
-                <p data-i18n="section.governance.text">Mo Council governs MoVerse with a dynamic structure: Legislative Seats (top Mo holders + community votes), Executive Seats (industry reps + users + AI), and Supervisory Seats (audit nodes). AI optimizes proposals, and NFT-based voting ensures transparency.</p>
+            <p data-i18n="section.governance.text">The Mo Council governs MoVerse with a dynamic, transparent structure: Legislative Seats for rule-making, Executive Seats for operations, and Supervisory Seats for audits. AI enhances decision-making, and NFT voting ensures fairness.</p>
+            <div class="governance-cards">
                 <div class="governance-card">
-                    <h3 data-i18n="section.governance.legislative.title">Legislative Seats</h3>
-                    <ul>
-                        <li><strong data-i18n="section.governance.composition">Composition:</strong> <span data-i18n="section.governance.legislative.composition">Top 5 Mo holders (holding ≥ 1% of total circulation) and community votes, using Quadratic Voting (e.g., 100 Mo = 10 vote weight).</span></li>
-                        <li><strong data-i18n="section.governance.adjustment">Dynamic Adjustment:</strong> <span data-i18n="section.governance.legislative.adjustment">For every ¥50M increase in transaction volume, add 1 seat, up to 15. New scenario launches nominate 1 industry representative (holding ≥ 5000 Mo).</span></li>
-                        <li><strong data-i18n="section.governance.functions">Core Functions:</strong> <span data-i18n="section.governance.legislative.functions">Rule-making (e.g., 5% commission for creative services), charter amendments (e.g., adding seats), new scenario policies (e.g., approving "human resources" scenario).</span></li>
-                        <li><strong data-i18n="section.governance.election">Election:</strong> <span data-i18n="section.governance.legislative.election">Quarterly, 3-month term, candidates stake 700 Mo, community votes decide.</span></li>
-                        <li><strong data-i18n="section.governance.exit">Exit Conditions:</strong> <span data-i18n="section.governance.legislative.exit">Drop out of top 5 holders or miss 3 consecutive votes, automatic exit with 10% stake deduction (70 Mo).</span></li>
-                        <li><strong data-i18n="section.governance.innovation">Innovation:</strong> <span data-i18n="section.governance.legislative.innovation">AI "MoCe" optimizes proposals, scenario incubator supports new scenarios (e.g., "education services" pilot).</span></li>
-                    </ul>
+                    <h3 data-i18n="section.governance.legislative_title">Legislative Seats</h3>
+                    <p data-i18n="section.governance.legislative_short">Top 5 Mo holders + Community votes</p>
+                    <div class="governance-details">
+                        <p data-i18n="section.governance.legislative_detail">Functions: Set rules (e.g., 5% fees), amend charters, approve new scenarios (e.g., mobility). Elections quarterly via quadratic voting (e.g., 100 Mo = 10 votes). AI optimizes proposals, reducing invalid submissions by 50%.</p>
+                    </div>
                 </div>
                 <div class="governance-card">
-                    <h3 data-i18n="section.governance.executive.title">Executive Seats</h3>
-                    <ul>
-                        <li><strong data-i18n="section.governance.composition">Composition:</strong> <span data-i18n="section.governance.executive.composition">Initially 3 top designers (holding ≥ 2000 Mo), 2 top employers (holding ≥ 1500 Mo), 1 AI seat ("MoZhi"). Expands by 1 industry rep per 2 new scenarios, up to 12 seats.</span></li>
-                        <li><strong data-i18n="section.governance.functions">Core Functions:</strong> <span data-i18n="section.governance.executive.functions">Daily operations (e.g., 1500 daily creative tasks), emergency decisions (e.g., pause trading), scenario integration (e.g., mobility + delivery synergy).</span></li>
-                        <li><strong data-i18n="section.governance.election">Election:</strong> <span data-i18n="section.governance.executive.election">Semi-annually, 6-month term, candidates stake 1200 Mo, community votes, winners train for 5 days.</span></li>
-                        <li><strong data-i18n="section.governance.exit">Exit Conditions:</strong> <span data-i18n="section.governance.executive.exit">Inactive for 3 months or rule violation (e.g., misappropriation), 15% stake deduction (180 Mo).</span></li>
-                        <li><strong data-i18n="section.governance.innovation">Innovation:</strong> <span data-i18n="section.governance.executive.innovation">Cross-scenario synergy engine (e.g., 18% efficiency increase in mobility + transport), dynamic seat allocation (based on transaction volume).</span></li>
-                    </ul>
+                    <h3 data-i18n="section.governance.executive_title">Executive Seats</h3>
+                    <p data-i18n="section.governance.executive_short">3 Industry reps + 2 Users + 1 AI</p>
+                    <div class="governance-details">
+                        <p data-i18n="section.governance.executive_detail">Functions: Manage daily operations, handle emergencies (e.g., pause trading if hacked), integrate scenarios. Elected semi-annually, impeached with 50% trust vote. AI drives cross-scenario efficiency (e.g., mobility + delivery).</p>
+                    </div>
                 </div>
                 <div class="governance-card">
-                    <h3 data-i18n="section.governance.supervisory.title">Supervisory Seats</h3>
-                    <ul>
-                        <li><strong data-i18n="section.governance.composition">Composition:</strong> <span data-i18n="section.governance.supervisory.composition">Initially 10 audit nodes (holding ≥ 800 Mo), add 5 nodes per ¥50M transaction volume increase, up to 30, randomly selected.</span></li>
-                        <li><strong data-i18n="section.governance.functions">Core Functions:</strong> <span data-i18n="section.governance.supervisory.functions">Financial audits (e.g., liquidity pool), rule supervision (e.g., compliance), impeachment (8 nodes initiate, 51% vote to pass).</span></li>
-                        <li><strong data-i18n="section.governance.election">Election:</strong> <span data-i18n="section.governance.supervisory.election">Annually in December, 12-month term, >25% veto rate triggers reselection.</span></li>
-                        <li><strong data-i18n="section.governance.exit">Exit Conditions:</strong> <span data-i18n="section.governance.supervisory.exit">Error rate >10% or fraud, full stake deduction, 30-day freeze.</span></li>
-                        <li><strong data-i18n="section.governance.innovation">Innovation:</strong> <span data-i18n="section.governance.supervisory.innovation">Real-time audit dashboard (15-minute updates), scenario templates (e.g., transport: mileage + fee).</span></li>
-                    </ul>
+                    <h3 data-i18n="section.governance.supervisory_title">Supervisory Seats</h3>
+                    <p data-i18n="section.governance.supervisory_short">10-30 Audit nodes</p>
+                    <div class="governance-details">
+                        <p data-i18n="section.governance.supervisory_detail">Functions: Audit finances (e.g., ¥500M transactions), supervise rules, initiate impeachments. Elected annually, 51% to remove. Real-time dashboards track activity, with templates for new scenarios.</p>
+                    </div>
                 </div>
             </div>
         </section>
-
         <section id="token">
             <h2 data-i18n="section.token.title">Token: Mo</h2>
-            <div class="token-details">
-                <p data-i18n="section.token.text">Mo is the ecosystem's token for governance, payments, and incentives. Initial issuance: 15M Mo (50% presale, 25% team, 25% ecosystem). Earn via trading rewards (40%), fiat exchange (40%), and staking (20%). Fees range 3-6%, with 40% burned.</p>
-                <h3 data-i18n="section.token.acquisition">Token Acquisition</h3>
-                <ul>
-                    <li><strong data-i18n="section.token.acquisition.rewards">Trading Rewards (40%):</strong> <span data-i18n="section.token.acquisition.rewards.desc">Creative services: 6% commission + 3% reward, extended scenarios: 3-6% commission + 1-2% reward, daily distribution on Polygon, reward cap at 150K Mo, 10% bonus for cross-scenario trades.</span></li>
-                    <li><strong data-i18n="section.token.acquisition.fiat">Fiat Exchange (40%):</strong> <span data-i18n="section.token.acquisition.fiat.desc">Initially 1 Mo = 1 CNY, 0.7% fee, daily cap at 3M Mo, supports multi-currency exchange (USDT, ETH).</span></li>
-                    <li><strong data-i18n="section.token.acquisition.staking">Staking Rewards (20%):</strong> <span data-i18n="section.token.acquisition.staking.desc">7% annualized return, staking pool of 600K Mo, scenario bonus +2% (e.g., 9% for creative services staking).</span></li>
-                </ul>
-                <h3 data-i18n="section.token.consumption">Token Consumption</h3>
-                <ul>
-                    <li><strong data-i18n="section.token.consumption.proposal">Proposal:</strong> <span data-i18n="section.token.consumption.proposal.desc">Regular proposal: 50 Mo, charter/scenario expansion: 500 Mo.</span></li>
-                    <li><strong data-i18n="section.token.consumption.upgrade">Upgrade:</strong> <span data-i18n="section.token.consumption.upgrade.desc">System upgrades: 250-900 Mo (e.g., DApp upgrade: 500 Mo).</span></li>
-                    <li><strong data-i18n="section.token.consumption.fees">Commission:</strong> <span data-i18n="section.token.consumption.fees.desc">Transaction fees: 3-6% (e.g., ¥1000 task, 50 Mo commission).</span></li>
-                    <li><strong data-i18n="section.token.consumption.traffic">Traffic Fee:</strong> <span data-i18n="section.token.consumption.traffic.desc">Task prioritization: 60-200 Mo (e.g., 18-hour top listing: 60 Mo).</span></li>
-                    <li><strong data-i18n="section.token.consumption.arbitration">Arbitration Fee:</strong> <span data-i18n="section.token.consumption.arbitration.desc">Initiate arbitration: 5% Mo, first appeal doubles (10% Mo), second appeal triples (15% Mo).</span></li>
-                    <li><strong data-i18n="section.token.consumption.cross">Cross-Scenario Fee:</strong> <span data-i18n="section.token.consumption.cross.desc">Cross-scenario trades: +0.3% Mo (e.g., ¥1000 order, extra 3 Mo).</span></li>
-                </ul>
-                <h3 data-i18n="section.token.inflation">Inflation Control</h3>
-                <ul>
-                    <li><strong data-i18n="section.token.inflation.issuance">Issuance:</strong> <span data-i18n="section.token.inflation.issuance.desc">Base issuance at 1.5%, AI-adjusted up to 4%.</span></li>
-                    <li><strong data-i18n="section.token.inflation.burn">Burn:</strong> <span data-i18n="section.token.inflation.burn.desc">40% of transaction fees burned, daily cap at 100K Mo, excess accumulates.</span></li>
-                    <li><strong data-i18n="section.token.inflation.initial">Initial Issuance:</strong> <span data-i18n="section.token.inflation.initial.desc">15M Mo: 50% presale (7.5M Mo, ¥5.25M), 25% team (5-year unlock, 3.75M Mo), 25% ecosystem (3.75M Mo).</span></li>
-                </ul>
-                <div class="token-flowchart">
-                    <canvas id="token-flowchart"></canvas>
-                </div>
+            <p data-i18n="section.token.text">Mo powers governance, payments, and incentives. Initial issuance: 15M Mo (50% presale, 25% team, 25% ecosystem). Earn via trading (40%), fiat exchange (40%), staking (20%). Fees 3-6%, 40% burned to control inflation.</p>
+            <div class="token-flowchart">
+                <canvas id="token-flowchart"></canvas>
             </div>
         </section>
-
         <section id="transaction">
             <h2 data-i18n="section.transaction.title">Transaction Simulation</h2>
+            <p data-i18n="section.transaction.text">Experience how MoVerse facilitates trading: from demand posting to NFT credential issuance. AI matches participants in minutes, and NFT-backed records ensure trust and tradability.</p>
             <div class="transaction-simulation">
                 <div class="transaction-step">
-                    <h3 data-i18n="section.transaction.step1.title">Step 1: Post a Demand</h3>
-                    <p data-i18n="section.transaction.step1.desc">Employer A posts a demand: "UI Design", budget ¥2000, 7-day deadline, pays 210 Mo (10 Mo posting fee + 200 Mo expedite fee).</p>
+                    <h3 data-i18n="section.transaction.step1_title">Step 1: Post a Demand</h3>
+                    <p data-i18n="section.transaction.step1_text">Employer A posts a UI design demand: ¥2000 budget, 7-day deadline. Fee: 10 Mo, stored on IPFS and Polygon.</p>
                 </div>
                 <div class="transaction-step">
-                    <h3 data-i18n="section.transaction.step2.title">Step 2: AI Matching</h3>
-                    <p data-i18n="section.transaction.step2.desc">AI matches 6 designers in 8 minutes based on level (40%), rating (40%), and expertise (20%), with scores ≥ 75 (e.g., Designer B scores 90).</p>
+                    <h3 data-i18n="section.transaction.step2_title">Step 2: AI Matching</h3>
+                    <p data-i18n="section.transaction.step2_text">AI analyzes ratings, skills, and bids, matching 6 designers in 8 minutes (e.g., scores 85-95). Efficiency boosts deal success by 25%.</p>
                 </div>
                 <div class="transaction-step">
-                    <h3 data-i18n="section.transaction.step3.title">Step 3: Bidding</h3>
-                    <p data-i18n="section.transaction.step3.desc">Designer B bids ¥1800, 6-day delivery, AI-calculated average price ¥130/hour, bidding lasts 6 minutes.</p>
+                    <h3 data-i18n="section.transaction.step3_title">Step 3: Bidding</h3>
+                    <p data-i18n="section.transaction.step3_text">Designer B bids ¥1800, 6-day delivery. AI suggests fair pricing (e.g., ¥130/hour), final score: 90/100.</p>
                 </div>
                 <div class="transaction-step">
-                    <h3 data-i18n="section.transaction.step4.title">Step 4: Delivery & Acceptance</h3>
-                    <p data-i18n="section.transaction.step4.desc">Designer B submits via IPFS, Employer A accepts within 30 hours, rates 5 stars, Designer B earns 1710 Mo (¥1800 - 5% commission ¥90).</p>
+                    <h3 data-i18n="section.transaction.step4_title">Step 4: Delivery & Acceptance</h3>
+                    <p data-i18n="section.transaction.step4_text">Designer B uploads via IPFS, Employer A accepts in 30 hours, rating 5 stars. Funds (1710 Mo) released instantly.</p>
                 </div>
                 <div class="transaction-step">
-                    <h3 data-i18n="section.transaction.step5.title">Step 5: NFT Credential</h3>
-                    <p data-i18n="section.transaction.step5.desc">A transaction NFT is generated as proof (ID #001, value ¥1800, date 2025-03-01), base price 40 Mo, tradeable or collectible.</p>
+                    <h3 data-i18n="section.transaction.step5_title">Step 5: NFT Credential</h3>
+                    <p data-i18n="section.transaction.step5_text">An NFT is minted (#001, ¥1800, 2025-03-01) as proof, tradable at 40 Mo base price or usable as credit.</p>
                 </div>
-                <button id="simulate-transaction" class="button" data-i18n="simulate.button">Simulate Transaction</button>
+                <button id="simulate-transaction" class="button" data-i18n="button.simulate">Simulate Transaction</button>
                 <div id="nft-preview">
-                    <h3 data-i18n="nft.preview.title">Transaction NFT</h3>
-                    <img id="nft-image" src="https://via.placeholder.com/200?text=NFT+Credential" alt="Transaction NFT">
-                    <p id="nft-details" data-i18n="nft.preview.details">Transaction ID: #001 | Value: ¥1800 | Date: 2025-03-01</p>
+                    <h3 data-i18n="section.transaction.nft_title">Transaction NFT</h3>
+                    <img id="nft-image" src="" alt="Transaction NFT">
+                    <p data-i18n="section.transaction.nft_info">Transaction ID: #001 | Value: ¥1800 | Date: 2025-03-01</p>
                 </div>
             </div>
         </section>
-
         <section id="roadmap">
             <h2 data-i18n="section.roadmap.title">Our Roadmap</h2>
-            <div class="roadmap-details">
+            <p data-i18n="section.roadmap.text">MoVerse’s journey from creative services to a global trading hub, driven by phased milestones, tech upgrades, and community growth.</p>
+            <div class="roadmap-timeline">
                 <div class="timeline-item">
-                    <h3 data-i18n="section.roadmap.phase0.title">Phase 0 (2025.3-2025.8): Creative Services Seed Stage</h3>
-                    <p data-i18n="section.roadmap.phase0.goal">Goal: 5000 users, ¥1M in transactions</p>
-                    <ul>
-                        <li><strong data-i18n="section.roadmap.phase0.incentive.title">Initial User Incentive Program:</strong> <span data-i18n="section.roadmap.phase0.incentive.desc">First 10,000 users receive 300 Mo + 15 commission-free tasks, requiring 1 task completion (¥100 minimum).</span></li>
-                        <li><strong data-i18n="section.roadmap.phase0.tech.title">Technical Development:</strong> <span data-i18n="section.roadmap.phase0.tech.desc">DApp v1.0 launched (features: task posting, matching, bidding, delivery), budget 100K Mo, deployed on Polygon mainnet.</span></li>
-                        <li><strong data-i18n="section.roadmap.phase0.milestones.title">Milestones:</strong> <span data-i18n="section.roadmap.phase0.milestones.desc">2025.4.15: DApp v1.0 live, 500 tasks completed; 2025.6.30: 2000 users, ¥500K transactions; 2025.8.31: 5000 users, ¥1M transactions.</span></li>
-                    </ul>
+                    <h3 data-i18n="section.roadmap.q1_title">Q1 2025</h3>
+                    <p data-i18n="section.roadmap.q1">Release whitepaper, build community (Discord, Telegram), secure initial partnerships. Target: 5000 users, ¥100K transactions.</p>
                 </div>
                 <div class="timeline-item">
-                    <h3 data-i18n="section.roadmap.phase1.title">Phase 1 (2025.9-2026.8): Creative Services Expansion + Mobility Services Launch</h3>
-                    <p data-i18n="section.roadmap.phase1.goal">Goal: 30,000 users, ¥30M in transactions</p>
-                    <ul>
-                        <li><strong data-i18n="section.roadmap.phase1.mobility.title">Mobility Services Pilot:</strong> <span data-i18n="section.roadmap.phase1.mobility.desc">5 cities (Shanghai, Tokyo, New York, London, Singapore), 1000 drivers, first month commission-free, drivers earn 200 Mo for 10 rides, first 5000 passengers get 50 Mo.</span></li>
-                        <li><strong data-i18n="section.roadmap.phase1.tech.title">Technical Development:</strong> <span data-i18n="section.roadmap.phase1.tech.desc">DApp v2.0 launched (adds mobility module, GPS matching), budget 150K Mo, deployed 2025.11.30. Cross-chain bridge (Polygon-BSC) reduces Gas fees by 20%.</span></li>
-                        <li><strong data-i18n="section.roadmap.phase1.milestones.title">Milestones:</strong> <span data-i18n="section.roadmap.phase1.milestones.desc">2025.11.30: DApp v2.0 live, mobility pilot starts; 2026.3.31: 10,000 users, ¥10M transactions; 2026.8.31: 30,000 users, ¥30M transactions.</span></li>
-                    </ul>
+                    <h3 data-i18n="section.roadmap.q2_title">Q2 2025</h3>
+                    <p data-i18n="section.roadmap.q2">Launch beta DApp v1.0 with creative services and NFT integration. Goal: 10K users, ¥500K transactions.</p>
                 </div>
                 <div class="timeline-item">
-                    <h3 data-i18n="section.roadmap.phase2.title">Phase 2 (2026.9-2027.8): Delivery + Transport Services Expansion</h3>
-                    <p data-i18n="section.roadmap.phase2.goal">Goal: 100,000 users, ¥100M in transactions</p>
-                    <ul>
-                        <li><strong data-i18n="section.roadmap.phase2.delivery.title">Delivery Services Pilot:</strong> <span data-i18n="section.roadmap.phase2.delivery.desc">10 cities, 2000 merchants + 3000 riders, first month commission-free, merchants earn 200 Mo per 50 orders, riders earn 100 Mo per 30 orders.</span></li>
-                        <li><strong data-i18n="section.roadmap.phase2.tech.title">Technical Development:</strong> <span data-i18n="section.roadmap.phase2.tech.desc">DApp v3.0 launched (adds delivery + transport modules, logistics tracking), budget 250K Mo, deployed 2026.12.31. Arbitrum integration, throughput to 1000 TPS.</span></li>
-                        <li><strong data-i18n="section.roadmap.phase2.milestones.title">Milestones:</strong> <span data-i18n="section.roadmap.phase2.milestones.desc">2026.12.31: DApp v3.0 live, delivery services start; 2027.3.31: 60,000 users, ¥70M transactions; 2027.8.31: 100,000 users, ¥100M transactions.</span></li>
-                    </ul>
+                    <h3 data-i18n="section.roadmap.q3_title">Q3 2025</h3>
+                    <p data-i18n="section.roadmap.q3">Full launch with AI governance, hit ¥1M transaction milestone. Deploy Polygon mainnet, 20K users.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 data-i18n="section.roadmap.q4_title">Q4 2025</h3>
+                    <p data-i18n="section.roadmap.q4">Expand to mobility services, achieve ¥5M transactions. Add cross-chain bridge (BSC), 30K users.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 data-i18n="section.roadmap.2026_title">2026</h3>
+                    <p data-i18n="section.roadmap.2026">Integrate delivery services, fully operational NFT voting, ¥10M transactions. DApp v2.0, 50K users.</p>
                 </div>
             </div>
         </section>
-
         <section id="culture">
             <h2 data-i18n="section.culture.title">Cultural Incentives</h2>
-            <div class="culture-details">
+            <p data-i18n="section.culture.text">Rooted in Eastern “Mo” culture, our incentives blend art, competition, and community to drive engagement and loyalty.</p>
+            <div class="culture-cards">
                 <div class="culture-card">
-                    <h3 data-i18n="section.culture.bazaar.title">Mo Bazaar</h3>
-                    <ul>
-                        <li><strong data-i18n="section.culture.bazaar.initial">Initial Scale:</strong> <span data-i18n="section.culture.bazaar.initial.desc">200 shops focused on creative services, offering design and art trading, expanding to 1500 shops covering all scenarios (mobility, delivery, transport) by 2027.</span></li>
-                        <li><strong data-i18n="section.culture.bazaar.innovation">Innovation:</strong> <span data-i18n="section.culture.bazaar.innovation.desc">AI-generated art (10 Mo per creation, tradeable at 50 Mo base price), NFT shop credentials (base price 300 Mo, tradeable or displayable).</span></li>
-                        <li><strong data-i18n="section.culture.bazaar.example">User Example:</strong> <span data-i18n="section.culture.bazaar.example.desc">User A opens a shop in Mo Bazaar, sells UI design services, earns ¥5000 monthly, receives an NFT credential (ID #001), auctioned for 350 Mo.</span></li>
-                    </ul>
+                    <h3 data-i18n="section.culture.bazaar_title">Mo Bazaar (墨肆)</h3>
+                    <p data-i18n="section.culture.bazaar_text">Start with 200 creative shops, expanding to 1500 across scenarios. AI generates art (10 Mo/piece), NFT shop credentials (300 Mo base) enhance ownership.</p>
                 </div>
                 <div class="culture-card">
-                    <h3 data-i18n="section.culture.contest.title">Mo Contest</h3>
-                    <ul>
-                        <li><strong data-i18n="section.culture.contest.initial">Initial Scale:</strong> <span data-i18n="section.culture.contest.initial.desc">Monthly prize pool of 5000 Mo, themed "Best Creative Design", expanding to 8000 Mo with cross-scenario themes (e.g., "Best Mobility Innovation") by 2027.</span></li>
-                        <li><strong data-i18n="section.culture.contest.innovation">Innovation:</strong> <span data-i18n="section.culture.contest.innovation.desc">AI judge assistant (20% fairness improvement), winners receive NFT achievement credentials (base price 500 Mo, tradeable or collectible).</span></li>
-                        <li><strong data-i18n="section.culture.contest.example">User Example:</strong> <span data-i18n="section.culture.contest.example.desc">User B joins Mo Contest, submits a UI design, wins first place, earns 2000 Mo + NFT achievement (ID #001), auctioned for 600 Mo.</span></li>
-                    </ul>
+                    <h3 data-i18n="section.culture.contest_title">Mo Contest (墨战)</h3>
+                    <p data-i18n="section.culture.contest_text">Monthly contests with 5000 Mo prize pool, growing to 8000 Mo. AI judges themes (e.g., cross-scenario designs), winners earn NFT badges (500 Mo base).</p>
                 </div>
             </div>
         </section>
-
         <section id="join">
             <h2 data-i18n="section.join.title">Join the Alliance</h2>
-            <p data-i18n="section.join.text">Be an early supporter or contributor: Investors fuel the decentralized future; talent (blockchain devs, AI experts, ops) builds it.</p>
+            <p data-i18n="section.join.text">Be an early supporter or contributor: Investors fuel the decentralized future; talent (blockchain devs, AI experts, ops) builds it. Join us to shape Web3 trading.</p>
             <div class="join-buttons">
                 <a href="https://discord.gg/GUuHfPyf" class="button" data-i18n="section.join.discord">Join Discord</a>
                 <button class="button" id="copy-email" data-i18n="button.copy_email" onclick="navigator.clipboard.writeText('wangdongdegugezhanghu@gmail.com')">Copy Email</button>
                 <a href="https://forms.gle/GkhgTL1Md51QvfyW8" class="button" target="_blank" data-i18n="button.subscribe">Subscribe</a>
             </div>
-            <div class="social-stats">
-                <p data-i18n="social_stats.text">Telegram Members: <span id=\"telegram-members\">0</span> | Discord Members: <span id=\"discord-members\">0</span></p>
-            </div>
         </section>
-
         <footer>
             <p data-i18n="footer.text">© 2025 MoVerse Alliance | Built by Geeks for a Decentralized World</p>
             <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/whitepaper_en.pdf" target="_blank" data-i18n="footer.whitepaper_en">Whitepaper (EN)</a>
@@ -646,9 +274,7 @@
             <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/moverse_project_details_cn.pdf" target="_blank" data-i18n="footer.project_details_cn">Project Details-cn</a>
         </footer>
     </div>
-
     <script>
-        // i18next 初始化，默认英文
         i18next.init({
             lng: 'en',
             fallbackLng: 'en',
@@ -656,146 +282,72 @@
                 en: {
                     translation: {
                         "title": "MoVerse | Web3 Trading Ecosystem",
+                        "title_span": "Verse",
                         "header.subtitle": "A Web3 Trading Ecosystem Powered by AI & NFTs",
                         "header.key_info": "2025 Launch | ¥100M-¥10B Goals | 5% Fees | $2.5T Market",
-                        "section.about.title": "About MoVerse",
-                        "section.about.text": "MoVerse is a decentralized platform redefining global trading with blockchain, AI, and NFTs. Launching with creative services in March 2025, we aim to scale to all legal trading scenarios, offering 5% low fees and cutting-edge tech rooted in Eastern \"Mo\" culture.",
+                        "nav.home": "Home",
                         "section.vision.title": "Our Vision",
-                        "section.vision.markets": "Market Prospects",
-                        "section.vision.markets.creative": "Creative Services Market",
-                        "section.vision.markets.creative.desc": "Expected global market size of $2.5T in 2025, with an 8% annual growth rate. Targeting 10M designers and 5M employers, capturing 1/3 of the market, with a transaction goal of ¥100M.",
-                        "section.vision.markets.mobility": "Mobility Services Market",
-                        "section.vision.markets.mobility.desc": "Global mobility market exceeds $100B, targeting ¥50B in annual transactions, capturing 5%. Low-cost entry at 3% commission, competing with platforms like Uber.",
-                        "section.vision.markets.delivery": "Delivery Services Market",
-                        "section.vision.markets.delivery.desc": "Food delivery market surpasses $150B, targeting ¥80B, capturing 5%. AI optimization improves delivery efficiency by 15%.",
-                        "section.vision.goals": "Goals and Timeline",
-                        "section.vision.short.title": "Short-term (2025–2027)",
-                        "section.vision.short": "Become the leading DAO in creative service trading, targeting ¥100M in annual transactions.",
-                        "section.vision.mid.title": "Mid-term (2027–2030)",
-                        "section.vision.mid": "Expand to mobility and delivery services, achieving ¥1B in annual transactions.",
-                        "section.vision.long.title": "Long-term (2030–2035)",
-                        "section.vision.long": "Cover all legal trading scenarios, becoming a cornerstone of the Web3 economy with ¥10B in annual transactions.",
+                        "section.vision.text": "MoVerse aims to redefine global trading through a decentralized ecosystem built on blockchain, AI, and NFTs. Starting with creative services in March 2025, we target a $2.5T market with 5% low fees, scaling to all legal trading scenarios by 2035.",
+                        "section.vision.short_title": "Short-term (2025–2027)",
+                        "section.vision.short": "Become the leading DAO in creative service trading with ¥100M annual transactions. Leverage AI-driven matching and low 5% fees to attract 10M designers and 5M employers, disrupting platforms like Fiverr (20% fees).",
+                        "section.vision.mid_title": "Mid-term (2027–2030)",
+                        "section.vision.mid": "Expand into mobility and delivery services, targeting ¥1B annual transactions. Integrate cross-scenario synergies (e.g., mobility + delivery) using AI optimization, capturing 5% of the $150B delivery market.",
+                        "section.vision.long_title": "Long-term (2030–2035)",
+                        "section.vision.long": "Achieve a 'boundaryless trading' ecosystem covering all legal scenarios (e.g., logistics, leasing), with ¥10B annual transactions. Position MoVerse as a Web3 cornerstone, rivaling centralized giants with NFT-backed trust.",
                         "section.governance.title": "Governance",
-                        "section.governance.text": "Mo Council governs MoVerse with a dynamic structure: Legislative Seats (top Mo holders + community votes), Executive Seats (industry reps + users + AI), and Supervisory Seats (audit nodes). AI optimizes proposals, and NFT-based voting ensures transparency.",
-                        "section.governance.composition": "Composition",
-                        "section.governance.adjustment": "Dynamic Adjustment",
-                        "section.governance.functions": "Core Functions",
-                        "section.governance.election": "Election",
-                        "section.governance.exit": "Exit Conditions",
-                        "section.governance.innovation": "Innovation",
-                        "section.governance.legislative.title": "Legislative Seats",
-                        "section.governance.legislative.composition": "Top 5 Mo holders (holding ≥ 1% of total circulation) and community votes, using Quadratic Voting (e.g., 100 Mo = 10 vote weight).",
-                        "section.governance.legislative.adjustment": "For every ¥50M increase in transaction volume, add 1 seat, up to 15. New scenario launches nominate 1 industry representative (holding ≥ 5000 Mo).",
-                        "section.governance.legislative.functions": "Rule-making (e.g., 5% commission for creative services), charter amendments (e.g., adding seats), new scenario policies (e.g., approving \"human resources\" scenario).",
-                        "section.governance.legislative.election": "Quarterly, 3-month term, candidates stake 700 Mo, community votes decide.",
-                        "section.governance.legislative.exit": "Drop out of top 5 holders or miss 3 consecutive votes, automatic exit with 10% stake deduction (70 Mo).",
-                        "section.governance.legislative.innovation": "AI \"MoCe\" optimizes proposals, scenario incubator supports new scenarios (e.g., \"education services\" pilot).",
-                        "section.governance.executive.title": "Executive Seats",
-                        "section.governance.executive.composition": "Initially 3 top designers (holding ≥ 2000 Mo), 2 top employers (holding ≥ 1500 Mo), 1 AI seat (\"MoZhi\"). Expands by 1 industry rep per 2 new scenarios, up to 12 seats.",
-                        "section.governance.executive.functions": "Daily operations (e.g., 1500 daily creative tasks), emergency decisions (e.g., pause trading), scenario integration (e.g., mobility + delivery synergy).",
-                        "section.governance.executive.election": "Semi-annually, 6-month term, candidates stake 1200 Mo, community votes, winners train for 5 days.",
-                        "section.governance.executive.exit": "Inactive for 3 months or rule violation (e.g., misappropriation), 15% stake deduction (180 Mo).",
-                        "section.governance.executive.innovation": "Cross-scenario synergy engine (e.g., 18% efficiency increase in mobility + transport), dynamic seat allocation (based on transaction volume).",
-                        "section.governance.supervisory.title": "Supervisory Seats",
-                        "section.governance.supervisory.composition": "Initially 10 audit nodes (holding ≥ 800 Mo), add 5 nodes per ¥50M transaction volume increase, up to 30, randomly selected.",
-                        "section.governance.supervisory.functions": "Financial audits (e.g., liquidity pool), rule supervision (e.g., compliance), impeachment (8 nodes initiate, 51% vote to pass).",
-                        "section.governance.supervisory.election": "Annually in December, 12-month term, >25% veto rate triggers reselection.",
-                        "section.governance.supervisory.exit": "Error rate >10% or fraud, full stake deduction, 30-day freeze.",
-                        "section.governance.supervisory.innovation": "Real-time audit dashboard (15-minute updates), scenario templates (e.g., transport: mileage + fee).",
+                        "section.governance.text": "The Mo Council governs MoVerse with a dynamic, transparent structure: Legislative Seats for rule-making, Executive Seats for operations, and Supervisory Seats for audits. AI enhances decision-making, and NFT voting ensures fairness.",
+                        "section.governance.legislative_title": "Legislative Seats",
+                        "section.governance.legislative_short": "Top 5 Mo holders + Community votes",
+                        "section.governance.legislative_detail": "Functions: Set rules (e.g., 5% fees), amend charters, approve new scenarios (e.g., mobility). Elections quarterly via quadratic voting (e.g., 100 Mo = 10 votes). AI optimizes proposals, reducing invalid submissions by 50%.",
+                        "section.governance.executive_title": "Executive Seats",
+                        "section.governance.executive_short": "3 Industry reps + 2 Users + 1 AI",
+                        "section.governance.executive_detail": "Functions: Manage daily operations, handle emergencies (e.g., pause trading if hacked), integrate scenarios. Elected semi-annually, impeached with 50% trust vote. AI drives cross-scenario efficiency (e.g., mobility + delivery).",
+                        "section.governance.supervisory_title": "Supervisory Seats",
+                        "section.governance.supervisory_short": "10-30 Audit nodes",
+                        "section.governance.supervisory_detail": "Functions: Audit finances (e.g., ¥500M transactions), supervise rules, initiate impeachments. Elected annually, 51% to remove. Real-time dashboards track activity, with templates for new scenarios.",
                         "section.token.title": "Token: Mo",
-                        "section.token.text": "Mo is the ecosystem's token for governance, payments, and incentives. Initial issuance: 15M Mo (50% presale, 25% team, 25% ecosystem). Earn via trading rewards (40%), fiat exchange (40%), and staking (20%). Fees range 3-6%, with 40% burned.",
-                        "section.token.acquisition": "Token Acquisition",
-                        "section.token.acquisition.rewards": "Trading Rewards (40%)",
-                        "section.token.acquisition.rewards.desc": "Creative services: 6% commission + 3% reward, extended scenarios: 3-6% commission + 1-2% reward, daily distribution on Polygon, reward cap at 150K Mo, 10% bonus for cross-scenario trades.",
-                        "section.token.acquisition.fiat": "Fiat Exchange (40%)",
-                        "section.token.acquisition.fiat.desc": "Initially 1 Mo = 1 CNY, 0.7% fee, daily cap at 3M Mo, supports multi-currency exchange (USDT, ETH).",
-                        "section.token.acquisition.staking": "Staking Rewards (20%)",
-                        "section.token.acquisition.staking.desc": "7% annualized return, staking pool of 600K Mo, scenario bonus +2% (e.g., 9% for creative services staking).",
-                        "section.token.consumption": "Token Consumption",
-                        "section.token.consumption.proposal": "Proposal",
-                        "section.token.consumption.proposal.desc": "Regular proposal: 50 Mo, charter/scenario expansion: 500 Mo.",
-                        "section.token.consumption.upgrade": "Upgrade",
-                        "section.token.consumption.upgrade.desc": "System upgrades: 250-900 Mo (e.g., DApp upgrade: 500 Mo).",
-                        "section.token.consumption.fees": "Commission",
-                        "section.token.consumption.fees.desc": "Transaction fees: 3-6% (e.g., ¥1000 task, 50 Mo commission).",
-                        "section.token.consumption.traffic": "Traffic Fee",
-                        "section.token.consumption.traffic.desc": "Task prioritization: 60-200 Mo (e.g., 18-hour top listing: 60 Mo).",
-                        "section.token.consumption.arbitration": "Arbitration Fee",
-                        "section.token.consumption.arbitration.desc": "Initiate arbitration: 5% Mo, first appeal doubles (10% Mo), second appeal triples (15% Mo).",
-                        "section.token.consumption.cross": "Cross-Scenario Fee",
-                        "section.token.consumption.cross.desc": "Cross-scenario trades: +0.3% Mo (e.g., ¥1000 order, extra 3 Mo).",
-                        "section.token.inflation": "Inflation Control",
-                        "section.token.inflation.issuance": "Issuance",
-                        "section.token.inflation.issuance.desc": "Base issuance at 1.5%, AI-adjusted up to 4%.",
-                        "section.token.inflation.burn": "Burn",
-                        "section.token.inflation.burn.desc": "40% of transaction fees burned, daily cap at 100K Mo, excess accumulates.",
-                        "section.token.inflation.initial": "Initial Issuance",
-                        "section.token.inflation.initial.desc": "15M Mo: 50% presale (7.5M Mo, ¥5.25M), 25% team (5-year unlock, 3.75M Mo), 25% ecosystem (3.75M Mo).",
+                        "section.token.text": "Mo powers governance, payments, and incentives. Initial issuance: 15M Mo (50% presale, 25% team, 25% ecosystem). Earn via trading (40%), fiat exchange (40%), staking (20%). Fees 3-6%, 40% burned to control inflation.",
                         "section.transaction.title": "Transaction Simulation",
-                        "section.transaction.step1.title": "Step 1: Post a Demand",
-                        "section.transaction.step1.desc": "Employer A posts a demand: \"UI Design\", budget ¥2000, 7-day deadline, pays 210 Mo (10 Mo posting fee + 200 Mo expedite fee).",
-                        "section.transaction.step2.title": "Step 2: AI Matching",
-                        "section.transaction.step2.desc": "AI matches 6 designers in 8 minutes based on level (40%), rating (40%), and expertise (20%), with scores ≥ 75 (e.g., Designer B scores 90).",
-                        "section.transaction.step3.title": "Step 3: Bidding",
-                        "section.transaction.step3.desc": "Designer B bids ¥1800, 6-day delivery, AI-calculated average price ¥130/hour, bidding lasts 6 minutes.",
-                        "section.transaction.step4.title": "Step 4: Delivery & Acceptance",
-                        "section.transaction.step4.desc": "Designer B submits via IPFS, Employer A accepts within 30 hours, rates 5 stars, Designer B earns 1710 Mo (¥1800 - 5% commission ¥90).",
-                        "section.transaction.step5.title": "Step 5: NFT Credential",
-                        "section.transaction.step5.desc": "A transaction NFT is generated as proof (ID #001, value ¥1800, date 2025-03-01), base price 40 Mo, tradeable or collectible.",
-                        "simulate.button": "Simulate Transaction",
-                        "nft.preview.title": "Transaction NFT",
-                        "nft.preview.details": "Transaction ID: #001 | Value: ¥1800 | Date: 2025-03-01",
+                        "section.transaction.text": "Experience how MoVerse facilitates trading: from demand posting to NFT credential issuance. AI matches participants in minutes, and NFT-backed records ensure trust and tradability.",
+                        "section.transaction.step1_title": "Step 1: Post a Demand",
+                        "section.transaction.step1_text": "Employer A posts a UI design demand: ¥2000 budget, 7-day deadline. Fee: 10 Mo, stored on IPFS and Polygon.",
+                        "section.transaction.step2_title": "Step 2: AI Matching",
+                        "section.transaction.step2_text": "AI analyzes ratings, skills, and bids, matching 6 designers in 8 minutes (e.g., scores 85-95). Efficiency boosts deal success by 25%.",
+                        "section.transaction.step3_title": "Step 3: Bidding",
+                        "section.transaction.step3_text": "Designer B bids ¥1800, 6-day delivery. AI suggests fair pricing (e.g., ¥130/hour), final score: 90/100.",
+                        "section.transaction.step4_title": "Step 4: Delivery & Acceptance",
+                        "section.transaction.step4_text": "Designer B uploads via IPFS, Employer A accepts in 30 hours, rating 5 stars. Funds (1710 Mo) released instantly.",
+                        "section.transaction.step5_title": "Step 5: NFT Credential",
+                        "section.transaction.step5_text": "An NFT is minted (#001, ¥1800, 2025-03-01) as proof, tradable at 40 Mo base price or usable as credit.",
+                        "section.transaction.nft_title": "Transaction NFT",
+                        "section.transaction.nft_info": "Transaction ID: #001 | Value: ¥1800 | Date: 2025-03-01",
                         "section.roadmap.title": "Our Roadmap",
-                        "section.roadmap.phase0.title": "Phase 0 (2025.3-2025.8): Creative Services Seed Stage",
-                        "section.roadmap.phase0.goal": "Goal: 5000 users, ¥1M in transactions",
-                        "section.roadmap.phase0.incentive.title": "Initial User Incentive Program",
-                        "section.roadmap.phase0.incentive.desc": "First 10,000 users receive 300 Mo + 15 commission-free tasks, requiring 1 task completion (¥100 minimum).",
-                        "section.roadmap.phase0.tech.title": "Technical Development",
-                        "section.roadmap.phase0.tech.desc": "DApp v1.0 launched (features: task posting, matching, bidding, delivery), budget 100K Mo, deployed on Polygon mainnet.",
-                        "section.roadmap.phase0.milestones.title": "Milestones",
-                        "section.roadmap.phase0.milestones.desc": "2025.4.15: DApp v1.0 live, 500 tasks completed; 2025.6.30: 2000 users, ¥500K transactions; 2025.8.31: 5000 users, ¥1M transactions.",
-                        "section.roadmap.phase1.title": "Phase 1 (2025.9-2026.8): Creative Services Expansion + Mobility Services Launch",
-                        "section.roadmap.phase1.goal": "Goal: 30,000 users, ¥30M in transactions",
-                        "section.roadmap.phase1.mobility.title": "Mobility Services Pilot",
-                        "section.roadmap.phase1.mobility.desc": "5 cities (Shanghai, Tokyo, New York, London, Singapore), 1000 drivers, first month commission-free, drivers earn 200 Mo for 10 rides, first 5000 passengers get 50 Mo.",
-                        "section.roadmap.phase1.tech.title": "Technical Development",
-                        "section.roadmap.phase1.tech.desc": "DApp v2.0 launched (adds mobility module, GPS matching), budget 150K Mo, deployed 2025.11.30. Cross-chain bridge (Polygon-BSC) reduces Gas fees by 20%.",
-                        "section.roadmap.phase1.milestones.title": "Milestones",
-                        "section.roadmap.phase1.milestones.desc": "2025.11.30: DApp v2.0 live, mobility pilot starts; 2026.3.31: 10,000 users, ¥10M transactions; 2026.8.31: 30,000 users, ¥30M transactions.",
-                        "section.roadmap.phase2.title": "Phase 2 (2026.9-2027.8): Delivery + Transport Services Expansion",
-                        "section.roadmap.phase2.goal": "Goal: 100,000 users, ¥100M in transactions",
-                        "section.roadmap.phase2.delivery.title": "Delivery Services Pilot",
-                        "section.roadmap.phase2.delivery.desc": "10 cities, 2000 merchants + 3000 riders, first month commission-free, merchants earn 200 Mo per 50 orders, riders earn 100 Mo per 30 orders.",
-                        "section.roadmap.phase2.tech.title": "Technical Development",
-                        "section.roadmap.phase2.tech.desc": "DApp v3.0 launched (adds delivery + transport modules, logistics tracking), budget 250K Mo, deployed 2026.12.31. Arbitrum integration, throughput to 1000 TPS.",
-                        "section.roadmap.phase2.milestones.title": "Milestones",
-                        "section.roadmap.phase2.milestones.desc": "2026.12.31: DApp v3.0 live, delivery services start; 2027.3.31: 60,000 users, ¥70M transactions; 2027.8.31: 100,000 users, ¥100M transactions.",
+                        "section.roadmap.text": "MoVerse’s journey from creative services to a global trading hub, driven by phased milestones, tech upgrades, and community growth.",
+                        "section.roadmap.q1_title": "Q1 2025",
+                        "section.roadmap.q1": "Release whitepaper, build community (Discord, Telegram), secure initial partnerships. Target: 5000 users, ¥100K transactions.",
+                        "section.roadmap.q2_title": "Q2 2025",
+                        "section.roadmap.q2": "Launch beta DApp v1.0 with creative services and NFT integration. Goal: 10K users, ¥500K transactions.",
+                        "section.roadmap.q3_title": "Q3 2025",
+                        "section.roadmap.q3": "Full launch with AI governance, hit ¥1M transaction milestone. Deploy Polygon mainnet, 20K users.",
+                        "section.roadmap.q4_title": "Q4 2025",
+                        "section.roadmap.q4": "Expand to mobility services, achieve ¥5M transactions. Add cross-chain bridge (BSC), 30K users.",
+                        "section.roadmap.2026_title": "2026",
+                        "section.roadmap.2026": "Integrate delivery services, fully operational NFT voting, ¥10M transactions. DApp v2.0, 50K users.",
                         "section.culture.title": "Cultural Incentives",
-                        "section.culture.bazaar.title": "Mo Bazaar",
-                        "section.culture.bazaar.initial": "Initial Scale",
-                        "section.culture.bazaar.initial.desc": "200 shops focused on creative services, offering design and art trading, expanding to 1500 shops covering all scenarios (mobility, delivery, transport) by 2027.",
-                        "section.culture.bazaar.innovation": "Innovation",
-                        "section.culture.bazaar.innovation.desc": "AI-generated art (10 Mo per creation, tradeable at 50 Mo base price), NFT shop credentials (base price 300 Mo, tradeable or displayable).",
-                        "section.culture.bazaar.example": "User Example",
-                        "section.culture.bazaar.example.desc": "User A opens a shop in Mo Bazaar, sells UI design services, earns ¥5000 monthly, receives an NFT credential (ID #001), auctioned for 350 Mo.",
-                        "section.culture.contest.title": "Mo Contest",
-                        "section.culture.contest.initial": "Initial Scale",
-                        "section.culture.contest.initial.desc": "Monthly prize pool of 5000 Mo, themed \"Best Creative Design\", expanding to 8000 Mo with cross-scenario themes (e.g., \"Best Mobility Innovation\") by 2027.",
-                        "section.culture.contest.innovation": "Innovation",
-                        "section.culture.contest.innovation.desc": "AI judge assistant (20% fairness improvement), winners receive NFT achievement credentials (base price 500 Mo, tradeable or collectible).",
-                        "section.culture.contest.example": "User Example",
-                        "section.culture.contest.example.desc": "User B joins Mo Contest, submits a UI design, wins first place, earns 2000 Mo + NFT achievement (ID #001), auctioned for 600 Mo.",
+                        "section.culture.text": "Rooted in Eastern 'Mo' culture, our incentives blend art, competition, and community to drive engagement and loyalty.",
+                        "section.culture.bazaar_title": "Mo Bazaar (墨肆)",
+                        "section.culture.bazaar_text": "Start with 200 creative shops, expanding to 1500 across scenarios. AI generates art (10 Mo/piece), NFT shop credentials (300 Mo base) enhance ownership.",
+                        "section.culture.contest_title": "Mo Contest (墨战)",
+                        "section.culture.contest_text": "Monthly contests with 5000 Mo prize pool, growing to 8000 Mo. AI judges themes (e.g., cross-scenario designs), winners earn NFT badges (500 Mo base).",
                         "section.join.title": "Join the Alliance",
-                        "section.join.text": "Be an early supporter or contributor: Investors fuel the decentralized future; talent (blockchain devs, AI experts, ops) builds it.",
+                        "section.join.text": "Be an early supporter or contributor: Investors fuel the decentralized future; talent (blockchain devs, AI experts, ops) builds it. Join us to shape Web3 trading.",
                         "section.join.discord": "Join Discord",
-                        "footer.text": "© 2025 MoVerse Alliance | Built by Geeks for a Decentralized World",
-                        "nav.home": "首页",
-                        "nav.about": "关于",
-                        "nav.join": "加入",
-                        "nav.learn_more": "了解更多",
+                        "button.simulate": "Simulate Transaction",
                         "button.copy_email": "Copy Email",
                         "button.subscribe": "Subscribe",
-                        "social_stats.text": "Telegram Members: <span id=\"telegram-members\">0</span> | Discord Members: <span id=\"discord-members\">0</span>",
+                        "button.lang_en": "EN",
+                        "button.lang_zh": "ZH",
+                        "footer.text": "© 2025 MoVerse Alliance | Built by Geeks for a Decentralized World",
                         "footer.whitepaper_en": "Whitepaper (EN)",
                         "footer.whitepaper_cn": "Whitepaper (CN)",
                         "footer.discord": "Discord",
@@ -807,146 +359,72 @@
                 zh: {
                     translation: {
                         "title": "墨道交易联盟 | Web3 交易生态系统",
-                        "header.subtitle": "人工智能与非同质化代币驱动的 Web3 交易生态系统",
-                        "header.key_info": "2025 年上线 | 目标交易额 ¥1 亿至 ¥100 亿 | 5% 手续费 | 全球市场规模 $2.5 万亿",
-                        "section.about.title": "关于墨道交易联盟",
-                        "section.about.text": "墨道交易联盟是一个去中心化的全球交易生态平台，利用区块链、人工智能和非同质化代币技术，结合东方“墨”文化元素，构建一个以交易为核心的综合性 Web3 生态。我们从创意服务交易起步，逐步扩展至所有合法交易场景，最终实现“交易无边界”的愿景。",
-                        "section.vision.title": "我们的愿景",
-                        "section.vision.markets": "市场前景",
-                        "section.vision.markets.creative": "创意服务市场",
-                        "section.vision.markets.creative.desc": "预计 2025 年全球创意服务市场规模达 $2.5 万亿，年增长率 8%。目标锁定 1000 万设计师和 500 万雇主，占据市场 1/3，交易额目标 ¥1 亿。",
-                        "section.vision.markets.mobility": "移动服务市场",
-                        "section.vision.markets.mobility.desc": "全球移动服务市场超 $1000 亿，目标年交易额 ¥50 亿，占 5%。以 3% 低佣金切入，与传统平台（如 Uber）竞争。",
-                        "section.vision.markets.delivery": "配送服务市场",
-                        "section.vision.markets.delivery.desc": "餐饮配送市场超 $1500 亿，目标 ¥80 亿，占 5%。通过人工智能优化配送路径，效率提升 15%。",
-                        "section.vision.goals": "目标与时间表",
-                        "section.vision.short.title": "短期（2025–2027 年）",
-                        "section.vision.short": "成为创意服务交易领域的领先去中心化自治组织（DAO），年交易额目标 ¥1 亿。",
-                        "section.vision.mid.title": "中期（2027–2030 年）",
-                        "section.vision.mid": "扩展至移动服务与配送服务，覆盖日常生活的核心需求，年交易额目标 ¥10 亿。",
-                        "section.vision.long.title": "长期（2030–2035 年）",
-                        "section.vision.long": "实现“交易无边界”，覆盖所有合法交易场景（如商业服务、租赁、房地产交易等），年交易额目标 ¥100 亿。",
-                        "section.governance.title": "治理结构",
-                        "section.governance.text": "墨道议会以动态结构治理墨道交易联盟，分为立规席、执行席和监察席。人工智能优化提案，非同质化代币投票确保透明性和公平性。",
-                        "section.governance.composition": "组成规则",
-                        "section.governance.adjustment": "动态调整",
-                        "section.governance.functions": "核心职能",
-                        "section.governance.election": "选举机制",
-                        "section.governance.exit": "退出条件",
-                        "section.governance.innovation": "创新功能",
-                        "section.governance.legislative.title": "立规席",
-                        "section.governance.legislative.composition": "由前 5 大墨代币持有者（持币量 ≥ 总流通量的 1%）和社区投票选出，投票采用二次方投票机制（例如 100 墨 = 10 票权重）。",
-                        "section.governance.legislative.adjustment": "交易额每增加 ¥5000 万，席位增加 1 位，上限 15 位。新交易场景上线后可提名 1 名行业代表（持墨 ≥ 5000）。",
-                        "section.governance.legislative.functions": "制定交易规则（如创意服务抽佣 5%）、宪章修改（如新增席位）、交易场景政策（如批准“人力服务”上线）。",
-                        "section.governance.legislative.election": "每季度末选举，任期 3 个月，候选人需质押 700 墨，社区投票决定。",
-                        "section.governance.legislative.exit": "持币跌出前 5 或连续 3 次弃权，自动退出，扣除 10% 质押（70 墨）。",
-                        "section.governance.legislative.innovation": "人工智能“墨策”优化提案，交易场景孵化器支持新场景开发（如“教育服务”试点）。",
-                        "section.governance.executive.title": "执行席",
-                        "section.governance.executive.composition": "初期由 3 名顶级设计师（持墨 ≥ 2000）、2 名高阶雇主（持墨 ≥ 1500）和 1 名人工智能席（“墨智”）组成，扩展期每新增 2 个交易场景增加 1 名行业代表，上限 12 席。",
-                        "section.governance.executive.functions": "日常运营（如创意服务每日上限 1500 个任务）、紧急决策（如暂停交易）、场景整合（如移动服务 + 配送服务协同）。",
-                        "section.governance.executive.election": "每半年选举，任期 6 个月，候选人需质押 1200 墨，社区投票决定，胜出者需培训 5 天。",
-                        "section.governance.executive.exit": "连续 3 个月不活跃或违规操作（如挪用资金），扣除 15% 质押（180 墨）。",
-                        "section.governance.executive.innovation": "跨场景协同引擎（例如移动 + 运输服务效率提升 18%）、动态执行席位（根据交易量调整权重）。",
-                        "section.governance.supervisory.title": "监察席",
-                        "section.governance.supervisory.composition": "初期 10 个审计节点（持墨 ≥ 800），交易额每增加 ¥5000 万增加 5 个节点，上限 30 个，随机抽取。",
-                        "section.governance.supervisory.functions": "财务审查（如流动池、收入异常）、规则监督（如执行席合规性）、弹劾（8 节点联署，51% 公投通过）。",
-                        "section.governance.supervisory.election": "每年 12 月选举，任期 12 个月，否决率 > 25% 需重新抽取。",
-                        "section.governance.supervisory.exit": "失误率 > 10% 或舞弊，扣除全部质押，冻结 30 天。",
-                        "section.governance.supervisory.innovation": "实时审计仪表盘（显示交易数据，15 分钟更新）、场景模板（例如运输服务：里程 + 费用）。",
-                        "section.token.title": "代币：墨",
-                        "section.token.text": "墨是墨道交易联盟生态系统的治理、支付和激励代币。初始发行量 1500 万墨，其中 50% 用于预售，25% 分配给团队，25% 用于生态建设。用户可通过交易奖励（40%）、法币兑换（40%）和质押收益（20%）获取墨代币。交易费用范围为 3-6%，其中 40% 用于销毁。",
-                        "section.token.acquisition": "代币获取",
-                        "section.token.acquisition.rewards": "交易奖励（40%）",
-                        "section.token.acquisition.rewards.desc": "创意服务抽佣 6% + 奖励 3%，扩展场景抽佣 3-6% + 奖励 1-2%，每日分配，存 Polygon 链，奖励上限 15 万墨，跨场景交易加成 10%。",
-                        "section.token.acquisition.fiat": "法币兑换（40%）",
-                        "section.token.acquisition.fiat.desc": "初始 1 墨 = 1 人民币，手续费 0.7%，每日兑换上限 300 万墨，支持多币种兑换（USDT、ETH）。",
-                        "section.token.acquisition.staking": "质押收益（20%）",
-                        "section.token.acquisition.staking.desc": "年化收益 7%，质押池 60 万墨，场景加成 +2%（例如创意服务质押收益 9%）。",
-                        "section.token.consumption": "代币消耗",
-                        "section.token.consumption.proposal": "提案",
-                        "section.token.consumption.proposal.desc": "普通提案 50 墨，宪章修改或场景扩展 500 墨。",
-                        "section.token.consumption.upgrade": "升级",
-                        "section.token.consumption.upgrade.desc": "系统升级 250-900 墨（例如 DApp 升级 500 墨）。",
-                        "section.token.consumption.fees": "佣金",
-                        "section.token.consumption.fees.desc": "交易佣金 3-6%（例如 ¥1000 任务，抽佣 50 墨）。",
-                        "section.token.consumption.traffic": "流量费",
-                        "section.token.consumption.traffic.desc": "任务置顶 60-200 墨（例如置顶 18 小时，60 墨）。",
-                        "section.token.consumption.arbitration": "仲裁费",
-                        "section.token.consumption.arbitration.desc": "仲裁发起 5% 墨，一级申诉双倍（10% 墨），二级申诉三倍（15% 墨）。",
-                        "section.token.consumption.cross": "跨场景费",
-                        "section.token.consumption.cross.desc": "跨场景交易 +0.3% 墨（例如 ¥1000 订单，额外 3 墨）。",
-                        "section.token.inflation": "通胀控制",
-                        "section.token.inflation.issuance": "增发",
-                        "section.token.inflation.issuance.desc": "基准增发 1.5%，人工智能根据交易量动态调整（上限 4%）。",
-                        "section.token.inflation.burn": "销毁",
-                        "section.token.inflation.burn.desc": "交易费的 40% 用于销毁，每日上限 10 万墨，超额累积。",
-                        "section.token.inflation.initial": "初始发行",
-                        "section.token.inflation.initial.desc": "1500 万墨，50% 预售（750 万墨，525 万人民币），25% 团队（5 年解锁，375 万墨），25% 生态（375 万墨）。",
-                        "section.transaction.title": "交易模拟",
-                        "section.transaction.step1.title": "步骤 1：发布需求",
-                        "section.transaction.step1.desc": "雇主 A 发布需求：“UI 设计”，预算 ¥2000，期限 7 天，支付 210 墨（10 墨发布费 + 加急费 200 墨）。",
-                        "section.transaction.step2.title": "步骤 2：人工智能匹配",
-                        "section.transaction.step2.desc": "人工智能根据等级（40%）、评分（40%）和领域（20%）匹配，8 分钟内匹配 6 名设计师，评分 ≥ 75 分（例如设计师 B 评分 90 分）。",
-                        "section.transaction.step3.title": "步骤 3：竞价",
-                        "section.transaction.step3.desc": "设计师 B 报价 ¥1800，交付时间 6 天，人工智能计算均价 ¥130/小时，竞价时长 6 分钟。",
-                        "section.transaction.step4.title": "步骤 4：交付与验收",
-                        "section.transaction.step4.desc": "设计师 B 通过 IPFS 提交设计成果，雇主 A 在 30 小时内验收，评分 5 星，设计师 B 获得 1710 墨（¥1800 - 5% 佣金 ¥90）。",
-                        "section.transaction.step5.title": "步骤 5：生成非同质化代币凭证",
-                        "section.transaction.step5.desc": "交易生成非同质化代币凭证，记录交易详情（编号 #001，金额 ¥1800，日期 2025-03-01），底价 40 墨，可交易或收藏。",
-                        "simulate.button": "模拟交易",
-                        "nft.preview.title": "交易非同质化代币凭证",
-                        "nft.preview.details": "交易编号：#001 | 金额：¥1800 | 日期：2025-03-01",
-                        "section.roadmap.title": "我们的路线图",
-                        "section.roadmap.phase0.title": "阶段 0（2025.3-2025.8）：创意服务种子期",
-                        "section.roadmap.phase0.goal": "目标：5000 用户，交易额 ¥100 万",
-                        "section.roadmap.phase0.incentive.title": "首批用户激励计划",
-                        "section.roadmap.phase0.incentive.desc": "首批 1 万用户每人 300 墨 + 15 个任务免佣，需完成 1 个任务（¥100 起）。",
-                        "section.roadmap.phase0.tech.title": "技术开发",
-                        "section.roadmap.phase0.tech.desc": "DApp v1.0 上线（功能：任务发布、匹配、竞价、交付），预算 10 万墨，部署于 Polygon 主网。",
-                        "section.roadmap.phase0.milestones.title": "里程碑",
-                        "section.roadmap.phase0.milestones.desc": "2025.4.15：DApp v1.0 上线，完成 500 个任务；2025.6.30：达成 2000 用户，交易额 ¥50 万；2025.8.31：达成 5000 用户，交易额¥100 万。",
-                        "section.roadmap.phase1.title": "阶段 1（2025.9-2026.8）：创意服务扩展 + 移动服务启动期",
-                        "section.roadmap.phase1.goal": "目标：3 万用户，交易额 ¥3000 万",
-                        "section.roadmap.phase1.mobility.title": "移动服务试点",
-                        "section.roadmap.phase1.mobility.desc": "5 个城市（上海、東京、纽约、伦敦、新加坡），1000 名司机，首月免佣，司机完成 10 单获 200 墨奖励，首批 5000 名乘客每人 50 墨奖励。",
-                        "section.roadmap.phase1.tech.title": "技术开发",
-                        "section.roadmap.phase1.tech.desc": "DApp v2.0 上线（新增移动服务模块，GPS 匹配功能），预算 15 万墨，部署于 2025.11.30。跨链交易桥（Polygon-BSC）上线，降低 Gas 费 20%。",
-                        "section.roadmap.phase1.milestones.title": "里程碑",
-                        "section.roadmap.phase1.milestones.desc": "2025.11.30：DApp v2.0 上线，移动服务试点启动；2026.3.31：达成 1 万用户，交易额 ¥1000 万；2026.8.31：达成 3 万用户，交易额 ¥3000 万。",
-                        "section.roadmap.phase2.title": "阶段 2（2026.9-2027.8）：配送服务 + 运输服务扩展期",
-                        "section.roadmap.phase2.goal": "目标：10 万用户，交易额 ¥1 亿",
-                        "section.roadmap.phase2.delivery.title": "配送服务试点",
-                        "section.roadmap.phase2.delivery.desc": "10 个城市，2000 名商家 + 3000 名骑手，首月免佣，商家每 50 单获 200 墨奖励，骑手每 30 单获 100 墨奖励。",
-                        "section.roadmap.phase2.tech.title": "技术开发",
-                        "section.roadmap.phase2.tech.desc": "DApp v3.0 上线（新增配送 + 运输服务模块，物流追踪功能），预算 25 万墨，部署于 2026.12.31。接入 Arbitrum，主网吞吐量提升至 1000 TPS。",
-                        "section.roadmap.phase2.milestones.title": "里程碑",
-                        "section.roadmap.phase2.milestones.desc": "2026.12.31：DApp v3.0 上线，配送服务启动；2027.3.31：达成 6 万用户，交易额 ¥7000 万；2027.8.31：达成 10 万用户，交易额 ¥1 亿。",
-                        "section.culture.title": "文化激励",
-                        "section.culture.bazaar.title": "墨肆",
-                        "section.culture.bazaar.initial": "初期规模",
-                        "section.culture.bazaar.initial.desc": "200 个商铺，专注于创意服务专区，提供设计、艺术品交易服务，2027 年扩展至 1500 个商铺，覆盖所有交易场景（移动、配送、运输等）。",
-                        "section.culture.bazaar.innovation": "创新功能",
-                        "section.culture.bazaar.innovation.desc": "人工智能生成艺术（每生成 1 次 10 墨，生成艺术品可交易，底价 50 墨），商铺非同质化代币凭证（底价 300 墨，可交易或展示）。",
-                        "section.culture.bazaar.example": "用户参与示例",
-                        "section.culture.bazaar.example.desc": "用户 A 在墨肆开设商铺，出售 UI 设计服务，月收入 ¥5000，获商铺非同质化代币凭证（编号 #001），拍卖价值 350 墨。",
-                        "section.culture.contest.title": "墨战",
-                        "section.culture.contest.initial": "初期规模",
-                        "section.culture.contest.initial.desc": "每月奖池 5000 墨，主题为“最佳创意设计”，2027 年扩展至 8000 墨，主题跨场景（例如“最佳移动服务创新”）。",
-                        "section.culture.contest.innovation": "创新功能",
-                        "section.culture.contest.innovation.desc": "人工智能评委助手（评分公平性提升 20%），获胜者获得非同质化代币战绩凭证（底价 500 墨，可交易或收藏）。",
-                        "section.culture.contest.example": "用户参与示例",
-                        "section.culture.contest.example.desc": "用户 B 参加墨战，提交 UI 设计作品，获得第一名，奖励 2000 墨 + 非同质化代币战绩凭证（编号 #001），拍卖价值 600 墨。",
-                        "section.join.title": "加入联盟",
-                        "section.join.text": "成为早期支持者或贡献者：投资者推动去中心化未来；人才（区块链开发、人工智能专家、运营人员）共同构建。",
-                        "section.join.discord": "加入 Discord",
-                        "footer.text": "© 2025 墨道交易联盟 | 由极客为去中心化世界打造",
+                        "title_span": "Verse",
+                        "header.subtitle": "人工智能与 NFT 驱动的 Web3 交易生态系统",
+                        "header.key_info": "2025年上线 | ¥100M-¥10B 目标 | 5% 手续费 | $2.5T 市场",
                         "nav.home": "首页",
-                        "nav.about": "关于",
-                        "nav.join": "加入",
-                        "nav.learn_more": "了解更多",
+                        "section.vision.title": "我们的愿景",
+                        "section.vision.text": "墨道交易联盟（MoVerse）致力于通过区块链、AI和NFT构建去中心化生态，重塑全球交易。2025年3月以创意服务为起点，锁定2.5万亿美元市场，以5%低佣金逐步扩展至所有合法交易场景，至2035年实现全面覆盖。",
+                        "section.vision.short_title": "短期 (2025–2027)",
+                        "section.vision.short": "成为创意服务交易的领先DAO，年交易额目标¥1亿。利用AI匹配和5%低佣金吸引1000万设计师和500万雇主，颠覆Fiverr（20%佣金）等平台。",
+                        "section.vision.mid_title": "中期 (2027–2030)",
+                        "section.vision.mid": "扩展至移动和配送服务，年交易额目标¥10亿。通过AI优化跨场景协同（如移动+配送），占据1500亿美元配送市场的5%。",
+                        "section.vision.long_title": "长期 (2030–2035)",
+                        "section.vision.long": "实现‘交易无边界’生态，覆盖所有合法场景（如物流、租赁），年交易额目标¥100亿。以NFT信任机制定位为Web3基石，挑战中心化巨头。",
+                        "section.governance.title": "治理结构",
+                        "section.governance.text": "墨道议会（Mo Council）以动态透明结构治理MoVerse：立规席制定规则，执行席负责运营，监察席进行审计。AI提升决策效率，NFT投票确保公平。",
+                        "section.governance.legislative_title": "立规席",
+                        "section.governance.legislative_short": "前5大Mo持有者 + 社区投票",
+                        "section.governance.legislative_detail": "职能：制定规则（如5%佣金）、修改宪章、批准新场景（如移动服务）。每季通过二次方投票选举（如100 Mo = 10票）。AI优化提案，减少50%无效提交。",
+                        "section.governance.executive_title": "执行席",
+                        "section.governance.executive_short": "3行业代表 + 2用户 + 1 AI",
+                        "section.governance.executive_detail": "职能：管理日常运营、处理紧急情况（如黑客攻击暂停交易）、整合场景。每半年选举，50%信任投票弹劾。AI提升跨场景效率（如移动+配送）。",
+                        "section.governance.supervisory_title": "监察席",
+                        "section.governance.supervisory_short": "10-30审计节点",
+                        "section.governance.supervisory_detail": "职能：审计财务（如¥5亿交易）、监督规则、发起弹劾。每年选举，51%移除。实时仪表盘追踪活动，提供新场景模板。",
+                        "section.token.title": "代币：Mo",
+                        "section.token.text": "Mo用于治理、支付和激励。初始发行1500万Mo（50%预售，25%团队，25%生态）。通过交易（40%）、法币兑换（40%）、质押（20%）获取。佣金3-6%，40%销毁控制通胀。",
+                        "section.transaction.title": "交易模拟",
+                        "section.transaction.text": "体验MoVerse如何促进交易：从需求发布到NFT凭证发行。AI在数分钟内匹配参与者，NFT记录确保信任和可交易性。",
+                        "section.transaction.step1_title": "步骤1：发布需求",
+                        "section.transaction.step1_text": "雇主A发布UI设计需求：预算¥2000，7天期限。费用：10 Mo，存储于IPFS和Polygon。",
+                        "section.transaction.step2_title": "步骤2：AI匹配",
+                        "section.transaction.step2_text": "AI分析评分、技能和出价，8分钟内匹配6名设计师（评分85-95）。效率提升交易成功率25%。",
+                        "section.transaction.step3_title": "步骤3：竞价",
+                        "section.transaction.step3_text": "设计师B出价¥1800，6天交付。AI建议公平价格（¥130/小时），最终得分90/100。",
+                        "section.transaction.step4_title": "步骤4：交付与验收",
+                        "section.transaction.step4_text": "设计师B通过IPFS上传，雇主A在30小时内验收，评5星。资金（1710 Mo）即时释放。",
+                        "section.transaction.step5_title": "步骤5：NFT凭证",
+                        "section.transaction.step5_text": "生成NFT（#001，¥1800，2025-03-01）作为证明，可交易（底价40 Mo）或用作信用。",
+                        "section.transaction.nft_title": "交易NFT",
+                        "section.transaction.nft_info": "交易ID：#001 | 价值：¥1800 | 日期：2025-03-01",
+                        "section.roadmap.title": "我们的路线图",
+                        "section.roadmap.text": "MoVerse从创意服务到全球交易中心的旅程，通过阶段性里程碑、技术升级和社区增长驱动。",
+                        "section.roadmap.q1_title": "2025年第一季度",
+                        "section.roadmap.q1": "发布白皮书，建立社区（Discord、Telegram），获得初步合作伙伴。目标：5000用户，¥10万交易额。",
+                        "section.roadmap.q2_title": "2025年第二季度",
+                        "section.roadmap.q2": "推出测试版DApp v1.0，支持创意服务和NFT集成。目标：1万用户，¥50万交易额。",
+                        "section.roadmap.q3_title": "2025年第三季度",
+                        "section.roadmap.q3": "正式上线，启用AI治理，达到¥100万交易里程碑。部署Polygon主网，2万用户。",
+                        "section.roadmap.q4_title": "2025年第四季度",
+                        "section.roadmap.q4": "扩展至移动服务，实现¥500万交易额。新增跨链桥（BSC），3万用户。",
+                        "section.roadmap.2026_title": "2026年",
+                        "section.roadmap.2026": "整合配送服务，NFT投票全面运行，¥1000万交易额。推出DApp v2.0，5万用户。",
+                        "section.culture.title": "文化激励",
+                        "section.culture.text": "植根于东方‘墨’文化，我们的激励机制融合艺术、竞赛和社区，激发参与度和忠诚度。",
+                        "section.culture.bazaar_title": "墨肆",
+                        "section.culture.bazaar_text": "起初200个创意商铺，扩展至1500个跨场景商铺。AI生成艺术（10 Mo/件），NFT商铺凭证（底价300 Mo）增强归属感。",
+                        "section.culture.contest_title": "墨战",
+                        "section.culture.contest_text": "月度竞赛，奖池5000 Mo，增长至8000 Mo。AI评判主题（如跨场景设计），获胜者获得NFT徽章（底价500 Mo）。",
+                        "section.join.title": "加入联盟",
+                        "section.join.text": "成为早期支持者或贡献者：投资者推动去中心化未来；人才（区块链开发、AI专家、运营）共同构建。加入我们，塑造Web3交易。",
+                        "section.join.discord": "加入 Discord",
+                        "button.simulate": "模拟交易",
                         "button.copy_email": "复制邮箱",
                         "button.subscribe": "订阅",
-                        "social_stats.text": "Telegram 成员：<span id=\"telegram-members\">0</span> | Discord 成员：<span id=\"discord-members\">0</span>",
+                        "button.lang_en": "英文",
+                        "button.lang_zh": "中文",
+                        "footer.text": "© 2025 墨道交易联盟 | 由极客为去中心化世界打造",
                         "footer.whitepaper_en": "白皮书（英文）",
                         "footer.whitepaper_cn": "白皮书（中文）",
                         "footer.discord": "Discord",
@@ -960,85 +438,36 @@
             if (err) console.error('i18next 初始化错误:', err);
             updateContent();
         });
-
-        // 更新内容
         function updateContent() {
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
                 element.innerHTML = i18next.t(key);
             });
             document.title = i18next.t('title');
-            const socialStats = document.querySelector('.social-stats p');
-            if (socialStats) socialStats.innerHTML = i18next.t('social_stats.text');
-
-            // 更新 Chart.js 图表
-            updateChartLabels();
-
-            // 更新 NFT 预览的动态文本
-            const nftDetails = document.getElementById('nft-details');
-            if (nftDetails) {
-                nftDetails.innerHTML = i18next.t('nft.preview.details');
-            }
         }
-
-        // 语言切换
         document.getElementById('lang-en').addEventListener('click', () => {
-            i18next.changeLanguage('en', (err) => {
-                if (err) console.error('切换到英文失败:', err);
-                updateContent();
-            });
+            i18next.changeLanguage('en', updateContent);
         });
-
         document.getElementById('lang-zh').addEventListener('click', () => {
-            i18next.changeLanguage('zh', (err) => {
-                if (err) console.error('切换到中文失败:', err);
-                updateContent();
-            });
+            i18next.changeLanguage('zh', updateContent);
         });
-
-        // 代币机制流程图
-        let chartInstance = null;
-        function updateChartLabels() {
-            const ctx = document.getElementById('token-flowchart').getContext('2d');
-            
-            // 销毁之前的图表实例（如果存在）
-            if (chartInstance) {
-                chartInstance.destroy();
+        const ctx = document.getElementById('token-flowchart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Burn (40%)', 'Development (35%)', 'Rewards (15%)', 'Reserve (10%)'],
+                datasets: [{
+                    data: [40, 35, 15, 10],
+                    backgroundColor: ['#d4af37', '#1e3a8a', '#3b82f6', '#f0f0f0'],
+                    borderColor: '#0a1a3d',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom', labels: { color: '#f0f0f0', font: { size: 14 } } } }
             }
-
-            // 创建新图表
-            chartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: [
-                        i18next.t('section.token.inflation.burn') + ' (40%)',
-                        i18next.t('section.token.consumption.upgrade') + ' (35%)',
-                        i18next.t('section.token.acquisition.rewards') + ' (15%)',
-                        'Reserve (10%)'
-                    ],
-                    datasets: [{
-                        data: [40, 35, 15, 10],
-                        backgroundColor: ['#d4af37', '#1e3a8a', '#3b82f6', '#f0f0f0'],
-                        borderColor: '#0a1a3d',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#f0f0f0',
-                                font: { size: 14 }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // 交易模拟动画
+        });
         document.getElementById('simulate-transaction').addEventListener('click', () => {
             const steps = document.querySelectorAll('.transaction-step');
             let delay = 0;
@@ -1058,8 +487,12 @@
                 delay += 1000;
             });
         });
-
-        // 视差滚动和淡入效果
+        document.querySelectorAll('.governance-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const details = card.querySelector('.governance-details');
+                details.classList.toggle('active');
+            });
+        });
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section');
             sections.forEach(section => {
@@ -1069,8 +502,6 @@
                 }
             });
         });
-
-        // 平滑滚动
         document.querySelectorAll('nav a').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
