@@ -10,235 +10,55 @@
     <script src="https://unpkg.com/web3@1.10.0/dist/web3.min.js"></script>
     <!-- p5.js 库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
-    <!-- IPFS 客户端（使用备用 CDN） -->
+    <!-- IPFS 客户端 -->
     <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client@60.0.0/dist/index.min.js"></script>
+    <!-- EmailJS 库 -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Courier New', monospace;
-            background: #1a1a1a;
-            color: #d0d0d0;
-            line-height: 1.6;
-            text-align: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            opacity: 0.3;
-        }
-        header {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 40px;
-            border-bottom: 2px solid #415a77;
-            position: relative;
-            box-shadow: 0 0 20px rgba(65, 90, 119, 0.8);
-            z-index: 1;
-        }
-        h1 {
-            font-size: 48px;
-            margin: 0;
-            color: #778da9;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px #415a77;
-            animation: glow 1.5s infinite alternate;
-        }
-        h1 span {
-            color: #d0d0d0;
-        }
-        .key-info {
-            font-size: 20px;
-            color: #778da9;
-            margin-top: 10px;
-        }
-        h2 {
-            font-size: 28px;
-            color: #778da9;
-            border-bottom: 1px dashed #415a77;
-            padding-bottom: 5px;
-        }
-        section {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px;
-            background: rgba(27, 38, 59, 0.95);
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(65, 90, 119, 0.5);
-            transition: opacity 0.3s ease-in-out;
-            z-index: 1;
-        }
-        section.fade {
-            opacity: 0;
-        }
-        p {
-            font-size: 18px;
-        }
-        .button {
-            padding: 12px 24px;
-            background: #415a77;
-            color: #d0d0d0;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            border: 1px solid #778da9;
-            cursor: pointer;
-        }
-        .button:hover {
-            background: #778da9;
-            box-shadow: 0 0 15px #778da9;
-            transform: scale(1.05);
-        }
-        .controls {
-            display: flex;
-            gap: 10px;
-            z-index: 10;
-        }
-        .lang-toggle {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-        .chain-toggle {
-            margin-top: 20px;
-            justify-content: center;
-        }
-        .data-terminal, .nft-display {
-            font-size: 14px;
-            color: #d0d0d0;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-            text-align: left;
-            margin-top: 20px;
-            border: 1px solid #415a77;
-            display: none;
-        }
-        .terminal-input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: #d0d0d0;
-            font-family: 'Courier New', monospace;
-            outline: none;
-        }
+        body { margin: 0; padding: 0; font-family: 'Courier New', monospace; background: #1a1a1a; color: #d0d0d0; line-height: 1.6; text-align: center; min-height: 100vh; overflow-x: hidden; }
+        canvas { position: absolute; top: 0; left: 0; z-index: -1; opacity: 0.3; }
+        header { background: rgba(0, 0, 0, 0.9); padding: 40px; border-bottom: 2px solid #415a77; position: relative; box-shadow: 0 0 20px rgba(65, 90, 119, 0.8); z-index: 1; }
+        h1 { font-size: 48px; margin: 0; color: #778da9; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 10px #415a77; animation: glow 1.5s infinite alternate; }
+        h1 span { color: #d0d0d0; }
+        .key-info { font-size: 20px; color: #778da9; margin-top: 10px; }
+        h2 { font-size: 28px; color: #778da9; border-bottom: 1px dashed #415a77; padding-bottom: 5px; }
+        section { max-width: 900px; margin: 40px auto; padding: 20px; background: rgba(27, 38, 59, 0.95); border-radius: 10px; box-shadow: 0 0 15px rgba(65, 90, 119, 0.5); transition: opacity 0.3s ease-in-out; z-index: 1; }
+        section.fade { opacity: 0; }
+        p { font-size: 18px; }
+        .button { padding: 12px 24px; background: #415a77; color: #d0d0d0; text-decoration: none; border-radius: 5px; transition: all 0.3s ease; border: 1px solid #778da9; cursor: pointer; }
+        .button:hover { background: #778da9; box-shadow: 0 0 15px #778da9; transform: scale(1.05); }
+        .controls { display: flex; gap: 10px; z-index: 10; }
+        .lang-toggle { position: absolute; top: 10px; right: 10px; }
+        .chain-toggle { margin-top: 20px; justify-content: center; }
+        .data-terminal, .nft-display { font-size: 14px; color: #d0d0d0; background: rgba(0, 0, 0, 0.8); padding: 10px; border-radius: 5px; text-align: left; margin-top: 20px; border: 1px solid #415a77; display: none; }
+        .terminal-input { width: 100%; background: transparent; border: none; color: #d0d0d0; font-family: 'Courier New', monospace; outline: none; }
         #nft-canvas { width: 200px; height: 200px; border: 2px solid #778da9; }
-        .join-buttons .button {
-            padding: 15px 30px;
-            font-size: 20px;
-            margin: 10px;
-        }
-        footer {
-            padding: 20px;
-            background: #1a1a1a;
-            font-size: 14px;
-            width: 100%;
-            box-shadow: 0 -2px 10px rgba(65, 90, 119, 0.5);
-            z-index: 1;
-        }
-        nav {
-            margin-top: 20px;
-        }
-        nav a {
-            margin: 0 15px;
-            color: #778da9;
-            text-decoration: none;
-            font-size: 18px;
-            transition: color 0.3s ease;
-        }
-        nav a:hover {
-            color: #d0d0d0;
-            text-shadow: 0 0 10px #415a77;
-        }
-        .social-stats {
-            margin-top: 20px;
-            font-size: 16px;
-            color: #778da9;
-        }
-        .social-stats span {
-            color: #d0d0d0;
-            font-weight: bold;
-        }
-        .wallet-connect {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .wallet-connect p {
-            font-size: 16px;
-            color: #778da9;
-            margin: 5px 0;
-        }
-        .banner {
-            margin-top: 20px;
-            padding: 10px;
-            background: rgba(65, 90, 119, 0.2);
-            border-radius: 5px;
-            animation: slide 10s infinite;
-        }
-        .contact-form {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .contact-form h3 {
-            font-size: 20px;
-            color: #778da9;
-            margin-bottom: 10px;
-        }
-        .contact-form input,
-        .contact-form textarea {
-            width: 100%;
-            max-width: 400px;
-            margin: 5px 0;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid #415a77;
-            color: #d0d0d0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-        }
-        .contact-form textarea {
-            height: 100px;
-            resize: none;
-        }
-        .contact-form #form-message {
-            margin-bottom: 10px;
-        }
-        @keyframes slide {
-            0% { transform: translateX(-10%); opacity: 0.5; }
-            50% { transform: translateX(0); opacity: 1; }
-            100% { transform: translateX(10%); opacity: 0.5; }
-        }
-        @keyframes glow {
-            from { text-shadow: 0 0 5px #778da9; }
-            to { text-shadow: 0 0 15px #778da9, 0 0 25px #415a77; }
-        }
+        .join-buttons .button { padding: 15px 30px; font-size: 20px; margin: 10px; }
+        footer { padding: 20px; background: #1a1a1a; font-size: 14px; width: 100%; box-shadow: 0 -2px 10px rgba(65, 90, 119, 0.5); z-index: 1; }
+        nav { margin-top: 20px; }
+        nav a { margin: 0 15px; color: #778da9; text-decoration: none; font-size: 18px; transition: color 0.3s ease; }
+        nav a:hover { color: #d0d0d0; text-shadow: 0 0 10px #415a77; }
+        .social-stats { margin-top: 20px; font-size: 16px; color: #778da9; }
+        .social-stats span { color: #d0d0d0; font-weight: bold; }
+        .wallet-connect { margin-top: 20px; text-align: center; }
+        .wallet-connect p { font-size: 16px; color: #778da9; margin: 5px 0; }
+        .banner { margin-top: 20px; padding: 10px; background: rgba(65, 90, 119, 0.2); border-radius: 5px; animation: slide 10s infinite; }
+        .contact-form { margin-top: 20px; text-align: center; }
+        .contact-form h3 { font-size: 20px; color: #778da9; margin-bottom: 10px; }
+        .contact-form input, .contact-form textarea { width: 100%; max-width: 400px; margin: 5px 0; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #415a77; color: #d0d0d0; border-radius: 5px; font-family: 'Courier New', monospace; }
+        .contact-form textarea { height: 100px; resize: none; }
+        .contact-form #form-message { margin-bottom: 10px; }
+        @keyframes slide { 0% { transform: translateX(-10%); opacity: 0.5; } 50% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(10%); opacity: 0.5; } }
+        @keyframes glow { from { text-shadow: 0 0 5px #778da9; } to { text-shadow: 0 0 15px #778da9, 0 0 25px #415a77; } }
         @media (max-width: 600px) {
             h1 { font-size: 32px; }
             .key-info { font-size: 16px; }
             h2 { font-size: 22px; }
             p { font-size: 16px; }
-            header {
-                padding: 20px;
-                min-height: 140px;
-            }
-            .lang-toggle {
-                top: 5px;
-                right: 5px;
-            }
-            .chain-toggle {
-                margin-top: 10px;
-                flex-direction: row;
-                gap: 5px;
-                justify-content: center;
-            }
-            .button {
-                padding: 6px 12px;
-                font-size: 14px;
-            }
+            header { padding: 20px; min-height: 140px; }
+            .lang-toggle { top: 5px; right: 5px; }
+            .chain-toggle { margin-top: 10px; flex-direction: row; gap: 5px; justify-content: center; }
+            .button { padding: 6px 12px; font-size: 14px; }
             section { margin: 20px; }
             .join-buttons .button { padding: 12px 24px; font-size: 18px; }
         }
@@ -310,6 +130,7 @@
             <p id="mo-balance" data-i18n="wallet.mo_balance">Mo Balance: 0</p>
         </div>
     </section>
+
     <section>
         <h2 data-i18n="section.roadmap.title">Our Roadmap</h2>
         <p data-i18n="section.roadmap.q1">Q1 2025: Whitepaper release, community building, initial partnerships.</p>
@@ -441,7 +262,9 @@
                     "wallet.not_connected": "Wallet: Not connected",
                     "wallet.meta_mask_not_detected": "Wallet: MetaMask not detected",
                     "wallet.connection_failed": "Wallet: Connection failed",
-                    "wallet.mo_balance": "Mo Balance: <balance>"
+                    "wallet.mo_balance": "Mo Balance: <balance>",
+                    "form.success_message": "Thank you, <name>! Your feedback has been sent to wangdongdegugezhanghu@gmail.com.",
+                    "form.error_message": "Sorry, there was an error sending your feedback. Please try again."
                 }
             },
             zh: {
@@ -502,14 +325,16 @@
                     "wallet.not_connected": "钱包：未连接",
                     "wallet.meta_mask_not_detected": "钱包：未检测到 MetaMask",
                     "wallet.connection_failed": "钱包：连接失败",
-                    "wallet.mo_balance": "Mo 余额：<balance>"
+                    "wallet.mo_balance": "Mo 余额：<balance>",
+                    "form.success_message": "感谢你，<name>！你的反馈已发送至 wangdongdegugezhanghu@gmail.com。",
+                    "form.error_message": "抱歉，发送反馈时出错，请重试。"
                 }
             }
         };
 
         // i18next 初始化，默认英文
         i18next.init({
-            lng: 'en',  // 默认设置为英文
+            lng: 'en',
             fallbackLng: 'en',
             resources: translations
         }, function(err, t) {
@@ -531,15 +356,12 @@
                     const [attr, i18nKey] = key.match(/\[(.+?)\](.+)/).slice(1);
                     element.setAttribute(attr, i18next.t(i18nKey));
                 } else {
-                    element.innerHTML = i18next.t(key);  // 使用 innerHTML 以支持嵌套标签
+                    element.innerHTML = i18next.t(key);
                 }
             });
             document.title = i18next.t('title');
-            // 更新动态生成的社交统计文本
             const socialStats = document.querySelector('.social-stats p');
-            if (socialStats) {
-                socialStats.innerHTML = i18next.t('social_stats.text');
-            }
+            if (socialStats) socialStats.innerHTML = i18next.t('social_stats.text');
         }
 
         // 语言切换
@@ -549,7 +371,6 @@
                 updateContent();
             });
         });
-
         document.getElementById('lang-zh').addEventListener('click', () => {
             i18next.changeLanguage('zh', (err) => {
                 if (err) console.error('Switch to Chinese failed:', err);
@@ -609,6 +430,9 @@
         }
         setInterval(updateLiveData, 5000);
         updateLiveData();
+
+        // EmailJS 初始化
+        emailjs.init("YOUR_PUBLIC_KEY"); // 替换为你的 EmailJS Public Key
 
         // 事件绑定
         window.addEventListener('load', () => {
@@ -715,26 +539,30 @@
             const connectWallet = document.getElementById('connect-wallet');
             if (connectWallet) {
                 connectWallet.addEventListener('click', async () => {
-                    console.log('Connect Wallet button clicked'); // 确认点击事件触发
+                    console.log('Connect Wallet button clicked');
                     if (typeof window.ethereum !== 'undefined') {
                         try {
+                            console.log('Requesting Ethereum accounts...');
                             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                             const address = accounts[0];
+                            console.log('Connected address:', address);
                             document.getElementById('wallet-address').textContent = `Wallet: ${address.slice(0, 6)}...${address.slice(-4)}`;
                             const balance = Math.floor(Math.random() * 10000); // 模拟余额
                             document.getElementById('mo-balance').textContent = i18next.t('wallet.mo_balance', { balance: balance });
                         } catch (error) {
                             console.error('Wallet connection error:', error);
                             document.getElementById('wallet-address').textContent = i18next.t('wallet.connection_failed');
+                            alert('Failed to connect wallet. Please ensure MetaMask is unlocked and try again.');
                         }
                     } else {
+                        console.log('Ethereum provider not detected');
                         document.getElementById('wallet-address').textContent = i18next.t('wallet.meta_mask_not_detected');
-                        alert('Please install MetaMask to connect your wallet.');
+                        alert('MetaMask not detected. Please install MetaMask and refresh the page.');
                     }
                 });
             }
 
-            // 联系表单
+            // 联系表单 - 使用 EmailJS 发送到你的 Gmail
             const contactForm = document.getElementById('contact-form');
             if (contactForm) {
                 contactForm.addEventListener('submit', (e) => {
@@ -743,14 +571,25 @@
                     const email = document.getElementById('email').value;
                     const message = document.getElementById('message').value;
                     const formMessage = document.getElementById('form-message');
-                    if (formMessage) {
-                        formMessage.textContent = i18next.language === 'en' 
-                            ? `Thank you, ${name}! Your message has been received. Email: ${email}, Message: ${message}`
-                            : `感谢你，${name}！你的消息已收到。邮箱：${email}，消息：${message}`;
+
+                    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+                        from_name: name,
+                        from_email: email,
+                        message: message,
+                        to_email: 'wangdongdegugezhanghu@gmail.com'
+                    })
+                    .then((response) => {
+                        console.log('Email sent successfully:', response);
+                        formMessage.textContent = i18next.t('form.success_message', { name: name });
                         formMessage.style.display = 'block';
-                        setTimeout(() => formMessage.style.display = 'none', 5000); // 5秒后隐藏
-                    }
-                    contactForm.reset();
+                        setTimeout(() => formMessage.style.display = 'none', 5000);
+                        contactForm.reset();
+                    }, (error) => {
+                        console.error('Email sending failed:', error);
+                        formMessage.textContent = i18next.t('form.error_message');
+                        formMessage.style.display = 'block';
+                        setTimeout(() => formMessage.style.display = 'none', 5000);
+                    });
                 });
             }
         });
