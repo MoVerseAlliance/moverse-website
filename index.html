@@ -264,7 +264,8 @@
                     "wallet.connection_failed": "Wallet: Connection failed",
                     "wallet.mo_balance": "Mo Balance: <balance>",
                     "form.success_message": "Thank you, <name>! Your feedback has been sent to wangdongdegugezhanghu@gmail.com.",
-                    "form.error_message": "Sorry, there was an error sending your feedback. Please try again."
+                    "form.error_message": "Sorry, there was an error sending your feedback. Please try again.",
+                    "form.setup_required": "EmailJS not configured. Please set up Service ID, Template ID, and Public Key."
                 }
             },
             zh: {
@@ -327,7 +328,8 @@
                     "wallet.connection_failed": "钱包：连接失败",
                     "wallet.mo_balance": "Mo 余额：<balance>",
                     "form.success_message": "感谢你，<name>！你的反馈已发送至 wangdongdegugezhanghu@gmail.com。",
-                    "form.error_message": "抱歉，发送反馈时出错，请重试。"
+                    "form.error_message": "抱歉，发送反馈时出错，请重试。",
+                    "form.setup_required": "EmailJS 未配置，请设置 Service ID、Template ID 和 Public Key。"
                 }
             }
         };
@@ -338,13 +340,13 @@
             fallbackLng: 'en',
             resources: translations
         }, function(err, t) {
-            if (err) console.error('i18next init error:', err);
+            if (err) console.error('i18next 初始化错误:', err);
             updateContent();
         });
 
         // 更新内容
         function updateContent() {
-            console.log('Updating content for language:', i18next.language);
+            console.log('更新语言内容:', i18next.language);
             const sections = document.querySelectorAll('section');
             sections.forEach(section => {
                 section.classList.add('fade');
@@ -367,13 +369,13 @@
         // 语言切换
         document.getElementById('lang-en').addEventListener('click', () => {
             i18next.changeLanguage('en', (err) => {
-                if (err) console.error('Switch to English failed:', err);
+                if (err) console.error('切换到英文失败:', err);
                 updateContent();
             });
         });
         document.getElementById('lang-zh').addEventListener('click', () => {
             i18next.changeLanguage('zh', (err) => {
-                if (err) console.error('Switch to Chinese failed:', err);
+                if (err) console.error('切换到中文失败:', err);
                 updateContent();
             });
         });
@@ -394,7 +396,7 @@
             updateLiveData();
             const terminalOutput = document.getElementById('terminal-container');
             if (terminalOutput && terminalOutput.style.display === 'block') {
-                terminalOutput.innerHTML += `<br>> Switched to ${chain}`;
+                terminalOutput.innerHTML += `<br>> 已切换到 ${chain}`;
             }
         }
 
@@ -431,8 +433,8 @@
         setInterval(updateLiveData, 5000);
         updateLiveData();
 
-        // EmailJS 初始化
-        emailjs.init("YOUR_PUBLIC_KEY"); // 替换为你的 EmailJS Public Key
+        // EmailJS 初始化，已填入你的公钥
+        emailjs.init("bMhfsu1WT3V0c_2rg");
 
         // 事件绑定
         window.addEventListener('load', () => {
@@ -524,11 +526,11 @@
                                     const { cid } = await ipfs.add(blob);
                                     document.getElementById('ipfs-hash').textContent = `IPFS Hash: ipfs://${cid}`;
                                 } catch (error) {
-                                    console.error('IPFS upload error:', error);
-                                    document.getElementById('ipfs-hash').textContent = 'IPFS upload failed';
+                                    console.error('IPFS 上传错误:', error);
+                                    document.getElementById('ipfs-hash').textContent = 'IPFS 上传失败';
                                 }
                             } else {
-                                document.getElementById('ipfs-hash').textContent = 'IPFS not available';
+                                document.getElementById('ipfs-hash').textContent = 'IPFS 不可用';
                             }
                         };
                     });
@@ -539,25 +541,26 @@
             const connectWallet = document.getElementById('connect-wallet');
             if (connectWallet) {
                 connectWallet.addEventListener('click', async () => {
-                    console.log('Connect Wallet button clicked');
+                    console.log('点击了 "连接钱包" 按钮');
                     if (typeof window.ethereum !== 'undefined') {
                         try {
-                            console.log('Requesting Ethereum accounts...');
+                            console.log('正在请求 MetaMask 账户...');
                             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                             const address = accounts[0];
-                            console.log('Connected address:', address);
-                            document.getElementById('wallet-address').textContent = `Wallet: ${address.slice(0, 6)}...${address.slice(-4)}`;
+                            console.log('已连接钱包地址:', address);
+                            document.getElementById('wallet-address').textContent = `钱包: ${address.slice(0, 6)}...${address.slice(-4)}`;
                             const balance = Math.floor(Math.random() * 10000); // 模拟余额
                             document.getElementById('mo-balance').textContent = i18next.t('wallet.mo_balance', { balance: balance });
+                            alert('钱包连接成功！地址: ' + address.slice(0, 6) + '...' + address.slice(-4));
                         } catch (error) {
-                            console.error('Wallet connection error:', error);
+                            console.error('钱包连接失败:', error);
                             document.getElementById('wallet-address').textContent = i18next.t('wallet.connection_failed');
-                            alert('Failed to connect wallet. Please ensure MetaMask is unlocked and try again.');
+                            alert('连接钱包失败，请确保 MetaMask 已解锁并允许连接。');
                         }
                     } else {
-                        console.log('Ethereum provider not detected');
+                        console.log('未检测到 Ethereum 提供者（MetaMask）');
                         document.getElementById('wallet-address').textContent = i18next.t('wallet.meta_mask_not_detected');
-                        alert('MetaMask not detected. Please install MetaMask and refresh the page.');
+                        alert('未检测到 MetaMask，请安装 MetaMask 插件并刷新页面。');
                     }
                 });
             }
@@ -572,20 +575,25 @@
                     const message = document.getElementById('message').value;
                     const formMessage = document.getElementById('form-message');
 
-                    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+                    // 使用你提供的 EmailJS 配置
+                    const serviceID = 'service_2f44e8c';
+                    const templateID = 'template_pycppjm';
+                    const publicKey = 'bMhfsu1WT3V0c_2rg';
+
+                    emailjs.send(serviceID, templateID, {
                         from_name: name,
                         from_email: email,
                         message: message,
                         to_email: 'wangdongdegugezhanghu@gmail.com'
-                    })
+                    }, publicKey)
                     .then((response) => {
-                        console.log('Email sent successfully:', response);
+                        console.log('邮件发送成功:', response);
                         formMessage.textContent = i18next.t('form.success_message', { name: name });
                         formMessage.style.display = 'block';
                         setTimeout(() => formMessage.style.display = 'none', 5000);
                         contactForm.reset();
                     }, (error) => {
-                        console.error('Email sending failed:', error);
+                        console.error('邮件发送失败:', error);
                         formMessage.textContent = i18next.t('form.error_message');
                         formMessage.style.display = 'block';
                         setTimeout(() => formMessage.style.display = 'none', 5000);
