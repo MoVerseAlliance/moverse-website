@@ -179,6 +179,31 @@ nav a:hover {
     border-radius: 5px;
     animation: slide 10s infinite;
 }
+        .contact-form {
+    margin-top: 20px;
+    text-align: center;
+}
+.contact-form h3 {
+    font-size: 20px;
+    color: #778da9;
+    margin-bottom: 10px;
+}
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    max-width: 400px;
+    margin: 5px 0;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #415a77;
+    color: #d0d0d0;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+}
+.contact-form textarea {
+    height: 100px;
+    resize: none;
+}
 @keyframes slide {
     0% { transform: translateX(-10%); opacity: 0.5; }
     50% { transform: translateX(0); opacity: 1; }
@@ -301,6 +326,15 @@ nav a:hover {
 </div>
         <div class="social-stats">
     <p>Telegram Members: <span id="telegram-members">0</span> | Discord Members: <span id="discord-members">0</span></p>
+</div>
+        <div class="contact-form">
+    <h3>Send Us Your Feedback</h3>
+    <form id="contact-form">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="email" id="email" placeholder="Your Email" required>
+        <textarea id="message" placeholder="Your Message" required></textarea>
+        <button type="submit" class="button">Submit</button>
+    </form>
 </div>
     </section>
 
@@ -608,6 +642,17 @@ if (connectWallet) {
         }
     });
 } 
+            const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+        alert(`Thank you, ${name}! Your message has been received.\nEmail: ${email}\nMessage: ${message}`);
+        contactForm.reset();
+    });
+}
         });
     </script>
 </body>
