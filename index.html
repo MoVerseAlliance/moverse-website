@@ -9,9 +9,7 @@
     <!-- p5.js 库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
     <!-- IPFS 客户端 -->
-    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client@60.0.0/dist/index.min.js"></script>
-    <!-- EmailJS 库 -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.com/npm/ipfs-http-client@60.0.0/dist/index.min.js"></script>
     <style>
         body { margin: 0; padding: 0; font-family: 'Courier New', monospace; background: #1a1a1a; color: #d0d0d0; line-height: 1.6; text-align: center; min-height: 100vh; overflow-x: hidden; }
         canvas { position: absolute; top: 0; left: 0; z-index: -1; opacity: 0.3; }
@@ -25,10 +23,11 @@
         p { font-size: 18px; }
         .button { padding: 12px 24px; background: #415a77; color: #d0d0d0; text-decoration: none; border-radius: 5px; transition: all 0.3s ease; border: 1px solid #778da9; cursor: pointer; }
         .button:hover { background: #778da9; box-shadow: 0 0 15px #778da9; transform: scale(1.05); }
-        .controls { display: flex; gap: 10px; z-index: 10; }
+        .controls { display: flex; gap: 10px; z-index: 10; justify-content: center; }
         .lang-toggle { position: absolute; top: 10px; right: 10px; }
-        .chain-toggle { margin-top: 20px; justify-content: center; }
-        .data-terminal, .nft-display { font-size: 14px; color: #d0d0d0; background: rgba(0, 0, 0, 0.8); padding: 10px; border-radius: 5px; text-align: left; margin-top: 20px; border: 1px solid #415a77; display: none; }
+        .chain-toggle { margin-top: 20px; }
+        .data-terminal, .nft-display { font-size: 14px; color: #d0d0d0; background: rgba(0, 0, 0, 0.8); padding: 10px; border-radius: 5px; text-align: left; margin-top: 20px; border: 1px solid #415a77; }
+        .data-terminal { max-height: 100px; overflow-y: auto; width: 100%; max-width: 600px; margin: 10px auto; }
         .terminal-input { width: 100%; background: transparent; border: none; color: #d0d0d0; font-family: 'Courier New', monospace; outline: none; }
         #nft-canvas { width: 200px; height: 200px; border: 2px solid #778da9; }
         .join-buttons .button { padding: 15px 30px; font-size: 20px; margin: 10px; }
@@ -39,11 +38,6 @@
         .social-stats { margin-top: 20px; font-size: 16px; color: #778da9; }
         .social-stats span { color: #d0d0d0; font-weight: bold; }
         .banner { margin-top: 20px; padding: 10px; background: rgba(65, 90, 119, 0.2); border-radius: 5px; animation: slide 10s infinite; }
-        .contact-form { margin-top: 20px; text-align: center; }
-        .contact-form h3 { font-size: 20px; color: #778da9; margin-bottom: 10px; }
-        .contact-form input, .contact-form textarea { width: 100%; max-width: 400px; margin: 5px 0; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #415a77; color: #d0d0d0; border-radius: 5px; font-family: 'Courier New', monospace; }
-        .contact-form textarea { height: 100px; resize: none; }
-        .contact-form #form-message { margin-bottom: 10px; }
         @keyframes slide { 0% { transform: translateX(-10%); opacity: 0.5; } 50% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(10%); opacity: 0.5; } }
         @keyframes glow { from { text-shadow: 0 0 5px #778da9; } to { text-shadow: 0 0 15px #778da9, 0 0 25px #415a77; } }
         @media (max-width: 600px) {
@@ -53,10 +47,11 @@
             p { font-size: 16px; }
             header { padding: 20px; min-height: 140px; }
             .lang-toggle { top: 5px; right: 5px; }
-            .chain-toggle { margin-top: 10px; flex-direction: row; gap: 5px; justify-content: center; }
+            .chain-toggle { margin-top: 10px; flex-direction: row; gap: 5px; }
             .button { padding: 6px 12px; font-size: 14px; }
             section { margin: 20px; }
             .join-buttons .button { padding: 12px 24px; font-size: 18px; }
+            .data-terminal { max-height: 80px; }
         }
     </style>
 </head>
@@ -73,6 +68,10 @@
             <button id="chain-polygon" class="button" data-i18n="chain.polygon">Polygon</button>
             <button id="chain-arbitrum" class="button" data-i18n="chain.arbitrum">Arbitrum</button>
             <button id="chain-bsc" class="button" data-i18n="chain.bsc">BSC</button>
+        </div>
+        <div class="data-terminal" id="terminal-container">
+            <span data-i18n="terminal.commands">MoVerse Terminal | Commands: 'status', 'vote', 'stake', 'query'</span><br>
+            <input type="text" class="terminal-input" id="terminal" data-i18n="[placeholder]terminal.placeholder" placeholder="Enter command...">
         </div>
         <nav>
             <a href="#home" data-i18n="nav.home">Home</a>
@@ -100,11 +99,6 @@
     <section>
         <h2 data-i18n="section.governance.title">Governance</h2>
         <p data-i18n="section.governance.text">Mo Council governs MoVerse with a dynamic structure: Legislative Seats (top Mo holders + community votes), Executive Seats (industry reps + users + AI), and Supervisory Seats (audit nodes). AI optimizes proposals, and NFT-based voting ensures transparency.</p>
-        <button id="toggle-terminal" class="button" data-i18n="button.show_terminal">Show Terminal</button>
-        <div class="data-terminal" id="terminal-container">
-            <span data-i18n="terminal.commands">MoVerse Terminal | Commands: 'status', 'vote', 'stake', 'query'</span><br>
-            <input type="text" class="terminal-input" id="terminal" data-i18n="[placeholder]terminal.placeholder" placeholder="Enter command...">
-        </div>
     </section>
 
     <section>
@@ -141,16 +135,6 @@
         </div>
         <div class="social-stats">
             <p data-i18n="social_stats.text">Telegram Members: <span id="telegram-members">0</span> | Discord Members: <span id="discord-members">0</span></p>
-        </div>
-        <div class="contact-form">
-            <h3 data-i18n="contact_form.title">Send Us Your Feedback</h3>
-            <p id="form-message" style="color: #d0d0d0; display: none;"></p>
-            <form id="contact-form">
-                <input type="text" id="name" placeholder="Your Name" data-i18n="[placeholder]form.name_placeholder" required>
-                <input type="email" id="email" placeholder="Your Email" data-i18n="[placeholder]form.email_placeholder" required>
-                <textarea id="message" placeholder="Your Message" data-i18n="[placeholder]form.message_placeholder" required></textarea>
-                <button type="submit" class="button" data-i18n="button.submit">Submit</button>
-            </form>
         </div>
     </section>
 
@@ -236,21 +220,14 @@
                     "button.generate": "Generate",
                     "button.copy_email": "Copy Email",
                     "button.subscribe": "Subscribe",
-                    "button.submit": "Submit",
                     "nft.generate_text": "Generate Mo Soul NFT (Stored on IPFS):",
                     "social_stats.text": "Telegram Members: <span id=\"telegram-members\">0</span> | Discord Members: <span id=\"discord-members\">0</span>",
-                    "contact_form.title": "Send Us Your Feedback",
-                    "form.name_placeholder": "Your Name",
-                    "form.email_placeholder": "Your Email",
-                    "form.message_placeholder": "Your Message",
                     "footer.whitepaper_en": "Whitepaper (EN)",
                     "footer.whitepaper_cn": "Whitepaper (CN)",
                     "footer.discord": "Discord",
                     "footer.telegram": "Telegram",
                     "footer.project_details_en": "Project Details-en",
-                    "footer.project_details_cn": "Project Details-cn",
-                    "form.success_message": "Thank you, <name>! Your feedback has been sent to wangdongdegugezhanghu@gmail.com.",
-                    "form.error_message": "Sorry, there was an error sending your feedback: <error>. Please try again or check EmailJS settings."
+                    "footer.project_details_cn": "Project Details-cn"
                 }
             },
             zh: {
@@ -294,21 +271,14 @@
                     "button.generate": "生成",
                     "button.copy_email": "复制邮箱",
                     "button.subscribe": "订阅",
-                    "button.submit": "提交",
                     "nft.generate_text": "生成 Mo Soul NFT（存储于 IPFS）：",
                     "social_stats.text": "Telegram 成员：<span id=\"telegram-members\">0</span> | Discord 成员：<span id=\"discord-members\">0</span>",
-                    "contact_form.title": "发送反馈",
-                    "form.name_placeholder": "你的姓名",
-                    "form.email_placeholder": "你的邮箱",
-                    "form.message_placeholder": "你的消息",
                     "footer.whitepaper_en": "白皮书（英文）",
                     "footer.whitepaper_cn": "白皮书（中文）",
                     "footer.discord": "Discord",
                     "footer.telegram": "Telegram",
                     "footer.project_details_en": "项目详情（英文）",
-                    "footer.project_details_cn": "项目详情（中文）",
-                    "form.success_message": "感谢你，<name>！你的反馈已发送至 wangdongdegugezhanghu@gmail.com。",
-                    "form.error_message": "抱歉，发送反馈时出错：<error>，请重试或检查 EmailJS 设置。"
+                    "footer.project_details_cn": "项目详情（中文）"
                 }
             }
         };
@@ -359,7 +329,7 @@
             });
         });
 
-        // 多链支持（模拟链切换，移除 Web3 依赖）
+        // 多链支持（模拟链切换）
         const chains = {
             polygon: 'Polygon',
             arbitrum: 'Arbitrum',
@@ -371,9 +341,13 @@
             currentChain = chain;
             console.log('切换到链:', chain);
             const terminalOutput = document.getElementById('terminal-container');
-            if (terminalOutput && terminalOutput.style.display === 'block') {
-                terminalOutput.innerHTML += `<br>> 已切换到 ${chain}`;
+            if (terminalOutput) {
+                terminalOutput.innerHTML += `<br>> Switched to ${chain}`;
+                // 自动滚动到底部
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
             }
+            // 添加弹窗提示
+            alert(`Switched to ${chain}`);
             updateLiveData();
         }
 
@@ -410,9 +384,6 @@
         setInterval(updateLiveData, 5000);
         updateLiveData();
 
-        // EmailJS 初始化
-        emailjs.init("bMhfsu1WT3V0c_2rg");
-
         // 事件绑定
         window.addEventListener('load', () => {
             // 链切换
@@ -441,18 +412,10 @@
                         } else {
                             output.innerHTML += `<br>> Unknown command: ${cmd}`;
                         }
+                        // 自动滚动到底部
+                        output.scrollTop = output.scrollHeight;
                         updateLiveData();
                     }
-                });
-            }
-
-            // 切换终端显示
-            const toggleTerminal = document.getElementById('toggle-terminal');
-            if (toggleTerminal) {
-                toggleTerminal.addEventListener('click', () => {
-                    console.log('点击了 "Show Terminal" 按钮');
-                    const terminalContainer = document.getElementById('terminal-container');
-                    terminalContainer.style.display = terminalContainer.style.display === 'block' ? 'none' : 'block';
                 });
             }
 
@@ -515,54 +478,6 @@
                         };
                     });
                 });
-            }
-
-            // 联系表单 - 使用 EmailJS 发送到你的 Gmail
-            const contactForm = document.getElementById('contact-form');
-            if (contactForm) {
-                contactForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    console.log('点击了 "Submit" 按钮，开始发送反馈');
-
-                    // 防止页面跳转到顶部
-                    const formPosition = contactForm.getBoundingClientRect().top + window.scrollY;
-                    
-                    const name = document.getElementById('name').value;
-                    const email = document.getElementById('email').value;
-                    const message = document.getElementById('message').value;
-                    const formMessage = document.getElementById('form-message');
-
-                    const serviceID = 'service_2f44e8c';
-                    const templateID = 'template_pycppjm';
-                    const publicKey = 'bMhfsu1WT3V0c_2rg';
-
-                    console.log('发送参数:', { from_name: name, from_email: email, message: message, to_email: 'wangdongdegugezhanghu@gmail.com' });
-
-                    try {
-                        const response = await emailjs.send(serviceID, templateID, {
-                            from_name: name,
-                            from_email: email,
-                            message: message,
-                            to_email: 'wangdongdegugezhanghu@gmail.com'
-                        }, publicKey);
-
-                        console.log('邮件发送成功:', response.status, response.text);
-                        formMessage.textContent = i18next.t('form.success_message', { name: name });
-                        formMessage.style.display = 'block';
-                        setTimeout(() => formMessage.style.display = 'none', 5000);
-                        contactForm.reset();
-                    } catch (error) {
-                        console.error('邮件发送失败:', error);
-                        formMessage.textContent = i18next.t('form.error_message', { error: error.text || error.message || '未知错误，可能服务未连接或网络问题' });
-                        formMessage.style.display = 'block';
-                        setTimeout(() => formMessage.style.display = 'none', 5000);
-                    }
-
-                    // 保持页面位置
-                    window.scrollTo({ top: formPosition, behavior: 'smooth' });
-                });
-            } else {
-                console.error('未找到 "contact-form" 元素');
             }
         });
     </script>
