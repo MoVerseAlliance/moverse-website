@@ -10,8 +10,8 @@
     <script src="https://unpkg.com/web3@1.10.0/dist/web3.min.js"></script>
     <!-- p5.js 库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
-    <!-- IPFS 客户端 -->
-    <script src="https://unpkg.com/ipfs-http-client@60.0.0/dist/index.min.js"></script>
+    <!-- IPFS 客户端（使用备用 CDN） -->
+    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client@60.0.0/dist/index.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -141,74 +141,77 @@
             z-index: 1;
         }
         nav {
-    margin-top: 20px;
-}
-nav a {
-    margin: 0 15px;
-    color: #778da9;
-    text-decoration: none;
-    font-size: 18px;
-    transition: color 0.3s ease;
-}
-nav a:hover {
-    color: #d0d0d0;
-    text-shadow: 0 0 10px #415a77;
-}
+            margin-top: 20px;
+        }
+        nav a {
+            margin: 0 15px;
+            color: #778da9;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #d0d0d0;
+            text-shadow: 0 0 10px #415a77;
+        }
         .social-stats {
-    margin-top: 20px;
-    font-size: 16px;
-    color: #778da9;
-}
-.social-stats span {
-    color: #d0d0d0;
-    font-weight: bold;
-}
+            margin-top: 20px;
+            font-size: 16px;
+            color: #778da9;
+        }
+        .social-stats span {
+            color: #d0d0d0;
+            font-weight: bold;
+        }
         .wallet-connect {
-    margin-top: 20px;
-    text-align: center;
-}
-.wallet-connect p {
-    font-size: 16px;
-    color: #778da9;
-    margin: 5px 0;
-}
+            margin-top: 20px;
+            text-align: center;
+        }
+        .wallet-connect p {
+            font-size: 16px;
+            color: #778da9;
+            margin: 5px 0;
+        }
         .banner {
-    margin-top: 20px;
-    padding: 10px;
-    background: rgba(65, 90, 119, 0.2);
-    border-radius: 5px;
-    animation: slide 10s infinite;
-}
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(65, 90, 119, 0.2);
+            border-radius: 5px;
+            animation: slide 10s infinite;
+        }
         .contact-form {
-    margin-top: 20px;
-    text-align: center;
-}
-.contact-form h3 {
-    font-size: 20px;
-    color: #778da9;
-    margin-bottom: 10px;
-}
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    max-width: 400px;
-    margin: 5px 0;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.8);
-    border: 1px solid #415a77;
-    color: #d0d0d0;
-    border-radius: 5px;
-    font-family: 'Courier New', monospace;
-}
-.contact-form textarea {
-    height: 100px;
-    resize: none;
-}
-@keyframes slide {
-    0% { transform: translateX(-10%); opacity: 0.5; }
-    50% { transform: translateX(0); opacity: 1; }
-    100% { transform: translateX(10%); opacity: 0.5; }
-}
+            margin-top: 20px;
+            text-align: center;
+        }
+        .contact-form h3 {
+            font-size: 20px;
+            color: #778da9;
+            margin-bottom: 10px;
+        }
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            max-width: 400px;
+            margin: 5px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #415a77;
+            color: #d0d0d0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        .contact-form textarea {
+            height: 100px;
+            resize: none;
+        }
+        .contact-form #form-message {
+            margin-bottom: 10px;
+        }
+        @keyframes slide {
+            0% { transform: translateX(-10%); opacity: 0.5; }
+            50% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(10%); opacity: 0.5; }
+        }
         @keyframes glow {
             from { text-shadow: 0 0 5px #778da9; }
             to { text-shadow: 0 0 15px #778da9, 0 0 25px #415a77; }
@@ -245,25 +248,25 @@ nav a:hover {
     <header>
         <h1>Mo<span>Verse</span>:did</h1>
         <p data-i18n="header.subtitle">A Web3 Trading Ecosystem Powered by AI & NFTs</p>
-        <p class="key-info">2025 Launch | ¥100M-¥10B Goals | 5% Fees | $2.5T Market</p>
+        <p class="key-info" data-i18n="header.key_info">2025 Launch | ¥100M-¥10B Goals | 5% Fees | $2.5T Market</p>
         <div class="controls lang-toggle">
             <button id="lang-en" class="button">EN</button>
             <button id="lang-zh" class="button">ZH</button>
         </div>
         <div class="controls chain-toggle">
-            <button id="chain-polygon" class="button">Polygon</button>
-            <button id="chain-arbitrum" class="button">Arbitrum</button>
-            <button id="chain-bsc" class="button">BSC</button>
+            <button id="chain-polygon" class="button" data-i18n="chain.polygon">Polygon</button>
+            <button id="chain-arbitrum" class="button" data-i18n="chain.arbitrum">Arbitrum</button>
+            <button id="chain-bsc" class="button" data-i18n="chain.bsc">BSC</button>
         </div>
         <nav>
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#join">Join</a>
-            <a href="learn-more.html">Learn More</a>
+            <a href="#home" data-i18n="nav.home">Home</a>
+            <a href="#about" data-i18n="nav.about">About</a>
+            <a href="#join" data-i18n="nav.join">Join</a>
+            <a href="learn-more.html" data-i18n="nav.learn_more">Learn More</a>
         </nav>
         <div class="banner">
-    <p id="banner-text">🚀 Join our AMA on March 15, 2025! Discuss the future of Web3 trading with us!</p>
-</div>
+            <p id="banner-text" data-i18n="banner.text">🚀 Join our AMA on March 15, 2025! Discuss the future of Web3 trading with us!</p>
+        </div>
     </header>
 
     <section>
@@ -272,19 +275,19 @@ nav a:hover {
     </section>
 
     <section>
-    <h2 data-i18n="section.vision.title">Our Vision</h2>
-    <p data-i18n="section.vision.short">Short-term (2025–2027): $5M transactions, lead creative trading.</p>
-    <p data-i18n="section.vision.mid">Mid-term (2027–2030): $50M transactions, expand to mobility & delivery.</p>
-    <p data-i18n="section.vision.long">Long-term (2030–2035): $500M transactions, cornerstone of Web3 economy.</p>
+        <h2 data-i18n="section.vision.title">Our Vision</h2>
+        <p data-i18n="section.vision.short">Short-term (2025–2027): $5M transactions, lead creative trading.</p>
+        <p data-i18n="section.vision.mid">Mid-term (2027–2030): $50M transactions, expand to mobility & delivery.</p>
+        <p data-i18n="section.vision.long">Long-term (2030–2035): $500M transactions, cornerstone of Web3 economy.</p>
     </section>
 
     <section>
         <h2 data-i18n="section.governance.title">Governance</h2>
         <p data-i18n="section.governance.text">Mo Council governs MoVerse with a dynamic structure: Legislative Seats (top Mo holders + community votes), Executive Seats (industry reps + users + AI), and Supervisory Seats (audit nodes). AI optimizes proposals, and NFT-based voting ensures transparency.</p>
-        <button id="toggle-terminal" class="button">Show Terminal</button>
+        <button id="toggle-terminal" class="button" data-i18n="button.show_terminal">Show Terminal</button>
         <div class="data-terminal" id="terminal-container">
-            > MoVerse Terminal | Commands: 'status', 'vote', 'stake', 'query'<br>
-            <input type="text" class="terminal-input" id="terminal" placeholder="Enter command...">
+            <span data-i18n="terminal.commands">MoVerse Terminal | Commands: 'status', 'vote', 'stake', 'query'</span><br>
+            <input type="text" class="terminal-input" id="terminal" data-i18n="[placeholder]terminal.placeholder" placeholder="Enter command...">
         </div>
     </section>
 
@@ -292,61 +295,62 @@ nav a:hover {
         <h2 data-i18n="section.token.title">Token: Mo</h2>
         <p data-i18n="section.token.text">Mo is the ecosystem's token for governance, payments, and incentives. Initial issuance: 15M Mo (50% presale, 25% team, 25% ecosystem). Earn via trading rewards (40%), fiat exchange (40%), and staking (20%). Fees range 3-6%, with 40% burned.</p>
         <div class="data-terminal" id="live-data">
-            Live Blockchain Data: Transactions: <span id="tx-count">0</span> | Mo Burned: <span id="mo-burned">0</span>
+            <span data-i18n="live_data.text">Live Blockchain Data: Transactions: <span id="tx-count">0</span> | Mo Burned: <span id="mo-burned">0</span></span>
         </div>
-        <button id="toggle-nft" class="button">Show NFT Generator</button>
+        <button id="toggle-nft" class="button" data-i18n="button.show_nft_generator">Show NFT Generator</button>
         <div class="nft-display" id="nft-container">
-            <p>Generate Mo Soul NFT (Stored on IPFS):</p>
-            <button id="generate-nft" class="button">Generate</button>
+            <p data-i18n="nft.generate_text">Generate Mo Soul NFT (Stored on IPFS):</p>
+            <button id="generate-nft" class="button" data-i18n="button.generate">Generate</button>
             <div id="nft-canvas"></div>
             <p id="ipfs-hash"></p>
         </div>
         <div class="wallet-connect">
-        <button id="connect-wallet" class="button">Connect Wallet</button>
-        <p id="wallet-address">Wallet: Not connected</p>
-        <p id="mo-balance">Mo Balance: 0</p>
-</div>
+            <button id="connect-wallet" class="button" data-i18n="button.connect_wallet">Connect Wallet</button>
+            <p id="wallet-address" data-i18n="wallet.not_connected">Wallet: Not connected</p>
+            <p id="mo-balance" data-i18n="wallet.mo_balance">Mo Balance: 0</p>
+        </div>
     </section>
     <section>
-    <h2 data-i18n="section.roadmap.title">Our Roadmap</h2>
-    <p data-i18n="section.roadmap.q1">Q1 2025: Whitepaper release, community building, initial partnerships.</p>
-    <p data-i18n="section.roadmap.q2">Q2 2025: Platform beta launch, creative services trading, NFT integration.</p>
-    <p data-i18n="section.roadmap.q3">Q3 2025: Full platform launch, AI governance rollout, $1M transaction milestone.</p>
-    <p data-i18n="section.roadmap.q4">Q4 2025: Expansion to mobility services, $5M transaction milestone.</p>
-    <p data-i18n="section.roadmap.2026">2026: Delivery services integration, NFT voting fully operational, $10M transaction milestone.</p>
+        <h2 data-i18n="section.roadmap.title">Our Roadmap</h2>
+        <p data-i18n="section.roadmap.q1">Q1 2025: Whitepaper release, community building, initial partnerships.</p>
+        <p data-i18n="section.roadmap.q2">Q2 2025: Platform beta launch, creative services trading, NFT integration.</p>
+        <p data-i18n="section.roadmap.q3">Q3 2025: Full platform launch, AI governance rollout, $1M transaction milestone.</p>
+        <p data-i18n="section.roadmap.q4">Q4 2025: Expansion to mobility services, $5M transaction milestone.</p>
+        <p data-i18n="section.roadmap.2026">2026: Delivery services integration, NFT voting fully operational, $10M transaction milestone.</p>
     </section>
 
     <section>
         <h2 data-i18n="section.join.title">Join the Alliance</h2>
         <p data-i18n="section.join.text">Be an early supporter or contributor: Investors fuel the decentralized future; talent (blockchain devs, AI experts, ops) builds it.</p>
-       <div class="join-buttons">
-    <a href="https://discord.gg/GUuHfPyf" class="button" data-i18n="section.join.discord">Join Discord</a>
-    <button class="button" id="copy-email" onclick="navigator.clipboard.writeText('wangdongdegugezhanghu@gmail.com')">Copy Email</button>
-    <a href="https://forms.gle/GkhgTL1Md51QvfyW8" class="button" target="_blank">Subscribe</a>
-</div>
+        <div class="join-buttons">
+            <a href="https://discord.gg/GUuHfPyf" class="button" data-i18n="section.join.discord">Join Discord</a>
+            <button class="button" id="copy-email" data-i18n="button.copy_email" onclick="navigator.clipboard.writeText('wangdongdegugezhanghu@gmail.com')">Copy Email</button>
+            <a href="https://forms.gle/GkhgTL1Md51QvfyW8" class="button" target="_blank" data-i18n="button.subscribe">Subscribe</a>
+        </div>
         <div class="social-stats">
-    <p>Telegram Members: <span id="telegram-members">0</span> | Discord Members: <span id="discord-members">0</span></p>
-</div>
+            <p data-i18n="social_stats.text">Telegram Members: <span id="telegram-members">0</span> | Discord Members: <span id="discord-members">0</span></p>
+        </div>
         <div class="contact-form">
-    <h3>Send Us Your Feedback</h3>
-    <form id="contact-form">
-        <input type="text" id="name" placeholder="Your Name" required>
-        <input type="email" id="email" placeholder="Your Email" required>
-        <textarea id="message" placeholder="Your Message" required></textarea>
-        <button type="submit" class="button">Submit</button>
-    </form>
-</div>
+            <h3 data-i18n="contact_form.title">Send Us Your Feedback</h3>
+            <p id="form-message" style="color: #d0d0d0; display: none;"></p>
+            <form id="contact-form">
+                <input type="text" id="name" placeholder="Your Name" data-i18n="[placeholder]form.name_placeholder" required>
+                <input type="email" id="email" placeholder="Your Email" data-i18n="[placeholder]form.email_placeholder" required>
+                <textarea id="message" placeholder="Your Message" data-i18n="[placeholder]form.message_placeholder" required></textarea>
+                <button type="submit" class="button" data-i18n="button.submit">Submit</button>
+            </form>
+        </div>
     </section>
 
     <footer>
-    <p data-i18n="footer.text">© 2025 MoVerse Alliance | Built by Geeks for a Decentralized World</p>
-    <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/whitepaper_en.pdf" class="button" target="_blank">Whitepaper (EN)</a>
-    <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/whitepaper_cn.pdf" class="button" target="_blank">Whitepaper (CN)</a>
-    <a href="https://discord.gg/GUuHfPyf" class="button" target="_blank">Discord</a>
-    <a href="https://t.me/MoVerseOfficial2025" class="button" target="_blank">Telegram</a>
-    <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/moverse_project_details_en.pdf" class="button" target="_blank">Project Details-en</a>
-    <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/moverse_project_details_cn.pdf" class="button" target="_blank">Project Details-cn</a>
-</footer>
+        <p data-i18n="footer.text">© 2025 MoVerse Alliance | Built by Geeks for a Decentralized World</p>
+        <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/whitepaper_en.pdf" class="button" target="_blank" data-i18n="footer.whitepaper_en">Whitepaper (EN)</a>
+        <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/whitepaper_cn.pdf" class="button" target="_blank" data-i18n="footer.whitepaper_cn">Whitepaper (CN)</a>
+        <a href="https://discord.gg/GUuHfPyf" class="button" target="_blank" data-i18n="footer.discord">Discord</a>
+        <a href="https://t.me/MoVerseOfficial2025" class="button" target="_blank" data-i18n="footer.telegram">Telegram</a>
+        <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/moverse_project_details_en.pdf" class="button" target="_blank" data-i18n="footer.project_details_en">Project Details-en</a>
+        <a href="https://github.com/MoVerseAlliance/moverse-website/raw/main/moverse_project_details_cn.pdf" class="button" target="_blank" data-i18n="footer.project_details_cn">Project Details-cn</a>
+    </footer>
 
     <script>
         // 粒子背景
@@ -383,6 +387,7 @@ nav a:hover {
                 translation: {
                     "title": "MoVerse | Web3 Trading Ecosystem",
                     "header.subtitle": "A Web3 Trading Ecosystem Powered by AI & NFTs",
+                    "header.key_info": "2025 Launch | ¥100M-¥10B Goals | 5% Fees | $2.5T Market",
                     "section.about.title": "About MoVerse",
                     "section.about.text": "MoVerse is a decentralized platform redefining global trading with blockchain, AI, and NFTs. Launching with creative services in March 2025, we aim to scale to all legal trading scenarios, offering 5% low fees and cutting-edge tech rooted in Eastern \"Mo\" culture.",
                     "section.vision.title": "Our Vision",
@@ -402,13 +407,49 @@ nav a:hover {
                     "section.join.title": "Join the Alliance",
                     "section.join.text": "Be an early supporter or contributor: Investors fuel the decentralized future; talent (blockchain devs, AI experts, ops) builds it.",
                     "section.join.discord": "Join Discord",
-                    "footer.text": "© 2025 MoVerse Alliance | Built by Geeks for a Decentralized World"
+                    "footer.text": "© 2025 MoVerse Alliance | Built by Geeks for a Decentralized World",
+                    "nav.home": "Home",
+                    "nav.about": "About",
+                    "nav.join": "Join",
+                    "nav.learn_more": "Learn More",
+                    "banner.text": "🚀 Join our AMA on March 15, 2025! Discuss the future of Web3 trading with us!",
+                    "chain.polygon": "Polygon",
+                    "chain.arbitrum": "Arbitrum",
+                    "chain.bsc": "BSC",
+                    "button.show_terminal": "Show Terminal",
+                    "terminal.commands": "MoVerse Terminal | Commands: 'status', 'vote', 'stake', 'query'",
+                    "terminal.placeholder": "Enter command...",
+                    "live_data.text": "Live Blockchain Data: Transactions: <span id=\"tx-count\">0</span> | Mo Burned: <span id=\"mo-burned\">0</span>",
+                    "button.show_nft_generator": "Show NFT Generator",
+                    "button.generate": "Generate",
+                    "button.connect_wallet": "Connect Wallet",
+                    "button.copy_email": "Copy Email",
+                    "button.subscribe": "Subscribe",
+                    "button.submit": "Submit",
+                    "nft.generate_text": "Generate Mo Soul NFT (Stored on IPFS):",
+                    "social_stats.text": "Telegram Members: <span id=\"telegram-members\">0</span> | Discord Members: <span id=\"discord-members\">0</span>",
+                    "contact_form.title": "Send Us Your Feedback",
+                    "form.name_placeholder": "Your Name",
+                    "form.email_placeholder": "Your Email",
+                    "form.message_placeholder": "Your Message",
+                    "footer.whitepaper_en": "Whitepaper (EN)",
+                    "footer.whitepaper_cn": "Whitepaper (CN)",
+                    "footer.discord": "Discord",
+                    "footer.telegram": "Telegram",
+                    "footer.project_details_en": "Project Details-en",
+                    "footer.project_details_cn": "Project Details-cn",
+                    "wallet.not_connected": "Wallet: Not connected",
+                    "wallet.meta_mask_not_detected": "Wallet: MetaMask not detected",
+                    "wallet.connection_failed": "Wallet: Connection failed",
+                    "wallet.mo_balance": "Mo Balance: <balance>",
+                    "form.success_message": "Thank you, <name>! Your message has been received. Email: <email>, Message: <message>"
                 }
             },
             zh: {
                 translation: {
                     "title": "墨道交易联盟 | Web3 交易生态系统",
                     "header.subtitle": "人工智能与 NFT 驱动的 Web3 交易生态系统",
+                    "header.key_info": "2025年上线 | ¥100M-¥10B 目标 | 5% 手续费 | $2.5T 市场",
                     "section.about.title": "关于墨道交易联盟",
                     "section.about.text": "墨道交易联盟（MoVerse）是一个去中心化平台，通过区块链、人工智能和 NFT 重塑全球交易。2025 年 3 月以创意服务为起点，我们目标扩展至所有合法交易场景，提供 5% 低佣金，融合东方“墨”文化的尖端技术。",
                     "section.vision.title": "我们的愿景",
@@ -418,7 +459,7 @@ nav a:hover {
                     "section.governance.title": "治理结构",
                     "section.governance.text": "墨道议会（Mo Council）以动态结构治理 MoVerse：立规席（顶级 Mo 持有者 + 社区投票）、执行席（行业代表 + 用户 + AI）、监察席（审计节点）。AI 优化提案，NFT 投票确保透明。",
                     "section.token.title": "代币：Mo（墨）",
-                    "section.token.text": "Mo 是生态的治理、支付和激励代币。初始发行：1500 万 Mo（50% 预售，25% 团队，25% 生态）。获取途径：交易奖励 (40%)、法币兑换 (40%)、质押收益 (20%)。佣金 3-6%，40% 销毁。",
+                    "section.token.text": "Mo 是生态系统的治理、支付和激励代币。初始发行量：1500 万 Mo（50% 预售，25% 团队，25% 生态）。获取途径：交易奖励 (40%)、法币兑换 (40%)、质押收益 (20%)。佣金 3-6%，40% 销毁。",
                     "section.roadmap.title": "我们的路线图",
                     "section.roadmap.q1": "2025年第一季度：白皮书发布，社区建设，初步合作。",
                     "section.roadmap.q2": "2025年第二季度：平台测试版上线，创意服务交易，NFT 集成。",
@@ -428,15 +469,50 @@ nav a:hover {
                     "section.join.title": "加入联盟",
                     "section.join.text": "成为早期支持者或贡献者：投资者推动去中心化未来；人才（区块链开发、AI 专家、运营）共同构建。",
                     "section.join.discord": "加入 Discord",
-                    "footer.text": "© 2025 墨道交易联盟 | 由极客为去中心化世界打造"
+                    "footer.text": "© 2025 墨道交易联盟 | 由极客为去中心化世界打造",
+                    "nav.home": "首页",
+                    "nav.about": "关于",
+                    "nav.join": "加入",
+                    "nav.learn_more": "了解更多",
+                    "banner.text": "🚀 加入我们2025年3月15日的 AMA！与我们讨论 Web3 交易的未来！",
+                    "chain.polygon": "Polygon",
+                    "chain.arbitrum": "Arbitrum",
+                    "chain.bsc": "BSC",
+                    "button.show_terminal": "显示终端",
+                    "terminal.commands": "MoVerse 终端 | 命令：'status', 'vote', 'stake', 'query'",
+                    "terminal.placeholder": "输入命令...",
+                    "live_data.text": "实时区块链数据：交易次数：<span id=\"tx-count\">0</span> | Mo 销毁量：<span id=\"mo-burned\">0</span>",
+                    "button.show_nft_generator": "显示 NFT 生成器",
+                    "button.generate": "生成",
+                    "button.connect_wallet": "连接钱包",
+                    "button.copy_email": "复制邮箱",
+                    "button.subscribe": "订阅",
+                    "button.submit": "提交",
+                    "nft.generate_text": "生成 Mo Soul NFT（存储于 IPFS）：",
+                    "social_stats.text": "Telegram 成员：<span id=\"telegram-members\">0</span> | Discord 成员：<span id=\"discord-members\">0</span>",
+                    "contact_form.title": "发送反馈",
+                    "form.name_placeholder": "你的姓名",
+                    "form.email_placeholder": "你的邮箱",
+                    "form.message_placeholder": "你的消息",
+                    "footer.whitepaper_en": "白皮书（英文）",
+                    "footer.whitepaper_cn": "白皮书（中文）",
+                    "footer.discord": "Discord",
+                    "footer.telegram": "Telegram",
+                    "footer.project_details_en": "项目详情（英文）",
+                    "footer.project_details_cn": "项目详情（中文）",
+                    "wallet.not_connected": "钱包：未连接",
+                    "wallet.meta_mask_not_detected": "钱包：未检测到 MetaMask",
+                    "wallet.connection_failed": "钱包：连接失败",
+                    "wallet.mo_balance": "Mo 余额：<balance>",
+                    "form.success_message": "感谢你，<name>！你的消息已收到。邮箱：<email>，消息：<message>"
                 }
             }
         };
 
-        // i18next 初始化，默认英文
+        // i18next 初始化，默认中文
         i18next.init({
-            lng: 'en',
-            fallbackLng: 'en',
+            lng: 'zh',
+            fallbackLng: 'zh',
             resources: translations
         }, function(err, t) {
             if (err) console.error('i18next init error:', err);
@@ -452,9 +528,20 @@ nav a:hover {
                 setTimeout(() => section.classList.remove('fade'), 300);
             });
             document.querySelectorAll('[data-i18n]').forEach(element => {
-                element.textContent = i18next.t(element.getAttribute('data-i18n'));
+                const key = element.getAttribute('data-i18n');
+                if (key.startsWith('[')) {
+                    const [attr, i18nKey] = key.match(/\[(.+?)\](.+)/).slice(1);
+                    element.setAttribute(attr, i18next.t(i18nKey));
+                } else {
+                    element.textContent = i18next.t(key);
+                }
             });
             document.title = i18next.t('title');
+            // 更新动态生成的社交统计文本
+            const socialStats = document.querySelector('.social-stats p');
+            if (socialStats) {
+                socialStats.innerHTML = i18next.t('social_stats.text', { telegramMembers: '<span id="telegram-members">0</span>', discordMembers: '<span id="discord-members">0</span>' });
+            }
         }
 
         // 语言切换
@@ -525,9 +612,6 @@ nav a:hover {
         setInterval(updateLiveData, 5000);
         updateLiveData();
 
-        // IPFS 初始化
-        const ipfs = window.IpfsHttpClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
-
         // 事件绑定
         window.addEventListener('load', () => {
             // 链切换
@@ -545,6 +629,7 @@ nav a:hover {
 
             // 终端交互
             const terminal = document.getElementById('terminal');
+            console.log('Terminal Element:', terminal); // 调试信息
             if (terminal) {
                 terminal.addEventListener('keydown', async (e) => {
                     if (e.key === 'Enter') {
@@ -567,28 +652,49 @@ nav a:hover {
                         updateLiveData();
                     }
                 });
+            } else {
+                console.error('Terminal element not found'); // 调试信息
             }
 
             // 切换终端显示
             const toggleTerminal = document.getElementById('toggle-terminal');
+            console.log('Toggle Terminal Button:', toggleTerminal); // 调试信息
             if (toggleTerminal) {
                 toggleTerminal.addEventListener('click', () => {
+                    console.log('Show Terminal button clicked'); // 调试信息
                     const terminalContainer = document.getElementById('terminal-container');
                     terminalContainer.style.display = terminalContainer.style.display === 'block' ? 'none' : 'block';
                 });
+            } else {
+                console.error('Toggle Terminal button not found'); // 调试信息
             }
 
-            // NFT 生成
+            // 切换 NFT 生成器显示
             const toggleNft = document.getElementById('toggle-nft');
+            console.log('Toggle NFT Button:', toggleNft); // 调试信息
             if (toggleNft) {
                 toggleNft.addEventListener('click', () => {
+                    console.log('Show NFT Generator button clicked'); // 调试信息
                     const nftContainer = document.getElementById('nft-container');
                     nftContainer.style.display = nftContainer.style.display === 'block' ? 'none' : 'block';
                 });
+            } else {
+                console.error('Toggle NFT button not found'); // 调试信息
             }
+
+            // IPFS 初始化
+            console.log('IPFS Client Available:', typeof window.IpfsHttpClient !== 'undefined'); // 调试信息
+            const ipfs = typeof window.IpfsHttpClient !== 'undefined' ? window.IpfsHttpClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) : null;
+            if (!ipfs) {
+                console.error('IPFS client not available'); // 调试信息
+            }
+
+            // NFT 生成
             const generateNft = document.getElementById('generate-nft');
+            console.log('Generate NFT Button:', generateNft); // 调试信息
             if (generateNft) {
                 generateNft.addEventListener('click', async () => {
+                    console.log('Generate NFT button clicked'); // 调试信息
                     const nftDiv = document.getElementById('nft-canvas');
                     nftDiv.innerHTML = '';
                     new p5(sketch => {
@@ -614,45 +720,75 @@ nav a:hover {
                             sketch.strokeWeight(5);
                             sketch.noFill();
                             sketch.rect(10, 10, 180, 180);
-                            const dataUrl = c.elt.toDataURL();
-                            const blob = await (await fetch(dataUrl)).blob();
-                            const { cid } = await ipfs.add(blob);
-                            document.getElementById('ipfs-hash').textContent = `IPFS Hash: ipfs://${cid}`;
+                            if (ipfs) {
+                                try {
+                                    const dataUrl = c.elt.toDataURL();
+                                    const blob = await (await fetch(dataUrl)).blob();
+                                    const { cid } = await ipfs.add(blob);
+                                    document.getElementById('ipfs-hash').textContent = `IPFS Hash: ipfs://${cid}`;
+                                } catch (error) {
+                                    console.error('IPFS upload error:', error);
+                                    document.getElementById('ipfs-hash').textContent = 'IPFS upload failed';
+                                }
+                            } else {
+                                document.getElementById('ipfs-hash').textContent = 'IPFS not available';
+                            }
                         };
                     });
                 });
+            } else {
+                console.error('Generate NFT button not found'); // 调试信息
             }
-           const connectWallet = document.getElementById('connect-wallet');
-if (connectWallet) {
-    connectWallet.addEventListener('click', async () => {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                const address = accounts[0];
-                document.getElementById('wallet-address').textContent = `Wallet: ${address.slice(0, 6)}...${address.slice(-4)}`;
-                // 模拟代币余额
-                const balance = Math.floor(Math.random() * 10000);
-                document.getElementById('mo-balance').textContent = `Mo Balance: ${balance}`;
-            } catch (error) {
-                console.error('Wallet connection error:', error);
-                document.getElementById('wallet-address').textContent = 'Wallet: Connection failed';
+
+            // 钱包连接
+            const connectWallet = document.getElementById('connect-wallet');
+            console.log('Connect Wallet Button:', connectWallet); // 调试信息
+            if (connectWallet) {
+                connectWallet.addEventListener('click', async () => {
+                    console.log('Connect Wallet button clicked'); // 调试信息
+                    if (typeof window.ethereum !== 'undefined') {
+                        try {
+                            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                            const address = accounts[0];
+                            document.getElementById('wallet-address').textContent = i18next.t('wallet.address', { address: `${address.slice(0, 6)}...${address.slice(-4)}` });
+                            // 模拟代币余额
+                            const balance = Math.floor(Math.random() * 10000);
+                            document.getElementById('mo-balance').textContent = i18next.t('wallet.mo_balance', { balance: balance });
+                        } catch (error) {
+                            console.error('Wallet connection error:', error);
+                            document.getElementById('wallet-address').textContent = i18next.t('wallet.connection_failed');
+                        }
+                    } else {
+                        document.getElementById('wallet-address').textContent = i18next.t('wallet.meta_mask_not_detected');
+                    }
+                });
+            } else {
+                console.error('Connect Wallet button not found'); // 调试信息
             }
-        } else {
-            document.getElementById('wallet-address').textContent = 'Wallet: MetaMask not detected';
-        }
-    });
-} 
+
+            // 联系表单
             const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
-        alert(`Thank you, ${name}! Your message has been received.\nEmail: ${email}\nMessage: ${message}`);
-        contactForm.reset();
-    });
-}
+            console.log('Contact Form Element:', contactForm); // 调试信息
+            if (contactForm) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    console.log('Form submitted'); // 调试信息
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const message = document.getElementById('message').value;
+                    console.log('Form data:', { name, email, message }); // 调试信息
+                    const formMessage = document.getElementById('form-message');
+                    if (formMessage) {
+                        formMessage.textContent = i18next.t('form.success_message', { name: name, email: email, message: message });
+                        formMessage.style.display = 'block';
+                    } else {
+                        console.error('Form message element not found'); // 调试信息
+                    }
+                    contactForm.reset();
+                });
+            } else {
+                console.error('Contact Form not found'); // 调试信息
+            }
         });
     </script>
 </body>
