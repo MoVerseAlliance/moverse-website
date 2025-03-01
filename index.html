@@ -6,8 +6,6 @@
     <title data-i18n="title">MoVerse | Web3 Trading Ecosystem</title>
     <!-- i18next 库 -->
     <script src="https://unpkg.com/i18next@23.11.2/dist/umd/i18next.min.js"></script>
-    <!-- Web3.js 库 -->
-    <script src="https://unpkg.com/web3@1.10.0/dist/web3.min.js"></script>
     <!-- p5.js 库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
     <!-- IPFS 客户端 -->
@@ -40,8 +38,6 @@
         nav a:hover { color: #d0d0d0; text-shadow: 0 0 10px #415a77; }
         .social-stats { margin-top: 20px; font-size: 16px; color: #778da9; }
         .social-stats span { color: #d0d0d0; font-weight: bold; }
-        .wallet-connect { margin-top: 20px; text-align: center; }
-        .wallet-connect p { font-size: 16px; color: #778da9; margin: 5px 0; }
         .banner { margin-top: 20px; padding: 10px; background: rgba(65, 90, 119, 0.2); border-radius: 5px; animation: slide 10s infinite; }
         .contact-form { margin-top: 20px; text-align: center; }
         .contact-form h3 { font-size: 20px; color: #778da9; margin-bottom: 10px; }
@@ -98,7 +94,7 @@
         <h2 data-i18n="section.vision.title">Our Vision</h2>
         <p data-i18n="section.vision.short">Short-term (2025–2027): $5M transactions, lead creative trading.</p>
         <p data-i18n="section.vision.mid">Mid-term (2027–2030): $50M transactions, expand to mobility & delivery.</p>
-        <p data-i18n="section.vision.long">Long-term (2030–2035): $500M transactions, cornerstone of Web3 economy.</p>
+        <p data-i acronymsn="section.vision.long">Long-term (2030–2035): $500M transactions, cornerstone of Web3 economy.</p>
     </section>
 
     <section>
@@ -123,11 +119,6 @@
             <button id="generate-nft" class="button" data-i18n="button.generate">Generate</button>
             <div id="nft-canvas"></div>
             <p id="ipfs-hash"></p>
-        </div>
-        <div class="wallet-connect">
-            <button id="connect-wallet" class="button" data-i18n="button.connect_wallet">Connect Wallet</button>
-            <p id="wallet-address" data-i18n="wallet.not_connected">Wallet: Not connected</p>
-            <p id="mo-balance" data-i18n="wallet.mo_balance">Mo Balance: 0</p>
         </div>
     </section>
 
@@ -243,7 +234,6 @@
                     "live_data.text": "Live Blockchain Data: Transactions: <span id=\"tx-count\">0</span> | Mo Burned: <span id=\"mo-burned\">0</span>",
                     "button.show_nft_generator": "Show NFT Generator",
                     "button.generate": "Generate",
-                    "button.connect_wallet": "Connect Wallet",
                     "button.copy_email": "Copy Email",
                     "button.subscribe": "Subscribe",
                     "button.submit": "Submit",
@@ -259,12 +249,8 @@
                     "footer.telegram": "Telegram",
                     "footer.project_details_en": "Project Details-en",
                     "footer.project_details_cn": "Project Details-cn",
-                    "wallet.not_connected": "Wallet: Not connected",
-                    "wallet.meta_mask_not_detected": "Wallet: MetaMask not detected",
-                    "wallet.connection_failed": "Wallet: Connection failed",
-                    "wallet.mo_balance": "Mo Balance: <balance>",
                     "form.success_message": "Thank you, <name>! Your feedback has been sent to wangdongdegugezhanghu@gmail.com.",
-                    "form.error_message": "Sorry, there was an error sending your feedback: <error>. Please try again."
+                    "form.error_message": "Sorry, there was an error sending your feedback: <error>. Please try again or check EmailJS settings."
                 }
             },
             zh: {
@@ -306,7 +292,6 @@
                     "live_data.text": "实时区块链数据：交易次数：<span id=\"tx-count\">0</span> | Mo 销毁量：<span id=\"mo-burned\">0</span>",
                     "button.show_nft_generator": "显示 NFT 生成器",
                     "button.generate": "生成",
-                    "button.connect_wallet": "连接钱包",
                     "button.copy_email": "复制邮箱",
                     "button.subscribe": "订阅",
                     "button.submit": "提交",
@@ -322,12 +307,8 @@
                     "footer.telegram": "Telegram",
                     "footer.project_details_en": "项目详情（英文）",
                     "footer.project_details_cn": "项目详情（中文）",
-                    "wallet.not_connected": "钱包：未连接",
-                    "wallet.meta_mask_not_detected": "钱包：未检测到 MetaMask",
-                    "wallet.connection_failed": "钱包：连接失败",
-                    "wallet.mo_balance": "Mo 余额：<balance>",
                     "form.success_message": "感谢你，<name>！你的反馈已发送至 wangdongdegugezhanghu@gmail.com。",
-                    "form.error_message": "抱歉，发送反馈时出错：<error>，请重试。"
+                    "form.error_message": "抱歉，发送反馈时出错：<error>，请重试或检查 EmailJS 设置。"
                 }
             }
         };
@@ -378,24 +359,22 @@
             });
         });
 
-        // 多链支持
+        // 多链支持（模拟链切换，移除 Web3 依赖）
         const chains = {
-            polygon: 'https://rpc-mumbai.maticvigil.com',
-            arbitrum: 'https://arbitrum-goerli.publicnode.com',
-            bsc: 'https://data-seed-prebsc-1-s1.bnbchain.org:8545'
+            polygon: 'Polygon',
+            arbitrum: 'Arbitrum',
+            bsc: 'BSC'
         };
         let currentChain = 'polygon';
-        let web3 = new Web3(chains[currentChain]);
 
         function switchChain(chain) {
             currentChain = chain;
-            web3 = new Web3(chains[chain]);
-            if (window.ethereum) web3 = new Web3(window.ethereum);
-            updateLiveData();
+            console.log('切换到链:', chain);
             const terminalOutput = document.getElementById('terminal-container');
             if (terminalOutput && terminalOutput.style.display === 'block') {
                 terminalOutput.innerHTML += `<br>> 已切换到 ${chain}`;
             }
+            updateLiveData();
         }
 
         // 智能合约模拟器
@@ -418,9 +397,9 @@
             query: () => `Tx: ${contractSimulator.totalTx}, Staked: ${contractSimulator.stakedMo}, Burned: ${contractSimulator.burnedMo}, Votes: ${JSON.stringify(contractSimulator.votes)}`
         };
 
-        // Web3 数据
+        // 模拟区块链数据更新
         let txCount = 0, moBurned = 0;
-        async function updateLiveData() {
+        function updateLiveData() {
             txCount = contractSimulator.totalTx;
             moBurned = contractSimulator.burnedMo;
             const txCountEl = document.getElementById('tx-count');
@@ -538,42 +517,16 @@
                 });
             }
 
-            // 钱包连接
-            const connectWallet = document.getElementById('connect-wallet');
-            if (connectWallet) {
-                connectWallet.addEventListener('click', async () => {
-                    console.log('点击了 "Connect Wallet" 按钮');
-                    if (typeof window.ethereum !== 'undefined') {
-                        try {
-                            console.log('检测到 MetaMask，正在请求账户...');
-                            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                            const address = accounts[0];
-                            console.log('连接成功，钱包地址:', address);
-                            document.getElementById('wallet-address').textContent = `钱包: ${address.slice(0, 6)}...${address.slice(-4)}`;
-                            const balance = Math.floor(Math.random() * 10000); // 模拟余额
-                            document.getElementById('mo-balance').textContent = i18next.t('wallet.mo_balance', { balance: balance });
-                            alert('钱包连接成功！地址: ' + address.slice(0, 6) + '...' + address.slice(-4));
-                        } catch (error) {
-                            console.error('钱包连接失败:', error.message);
-                            document.getElementById('wallet-address').textContent = i18next.t('wallet.connection_failed');
-                            alert('连接钱包失败: ' + error.message + '\n请确保 MetaMask 已解锁并允许连接。');
-                        }
-                    } else {
-                        console.log('未检测到 MetaMask');
-                        document.getElementById('wallet-address').textContent = i18next.t('wallet.meta_mask_not_detected');
-                        alert('未检测到 MetaMask，请安装 MetaMask 插件并刷新页面。');
-                    }
-                });
-            } else {
-                console.error('未找到 "connect-wallet" 元素');
-            }
-
             // 联系表单 - 使用 EmailJS 发送到你的 Gmail
             const contactForm = document.getElementById('contact-form');
             if (contactForm) {
-                contactForm.addEventListener('submit', (e) => {
+                contactForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     console.log('点击了 "Submit" 按钮，开始发送反馈');
+
+                    // 防止页面跳转到顶部
+                    const formPosition = contactForm.getBoundingClientRect().top + window.scrollY;
+                    
                     const name = document.getElementById('name').value;
                     const email = document.getElementById('email').value;
                     const message = document.getElementById('message').value;
@@ -585,25 +538,28 @@
 
                     console.log('发送参数:', { from_name: name, from_email: email, message: message, to_email: 'wangdongdegugezhanghu@gmail.com' });
 
-                    emailjs.send(serviceID, templateID, {
-                        from_name: name,
-                        from_email: email,
-                        message: message,
-                        to_email: 'wangdongdegugezhanghu@gmail.com'
-                    }, publicKey)
-                    .then((response) => {
+                    try {
+                        const response = await emailjs.send(serviceID, templateID, {
+                            from_name: name,
+                            from_email: email,
+                            message: message,
+                            to_email: 'wangdongdegugezhanghu@gmail.com'
+                        }, publicKey);
+
                         console.log('邮件发送成功:', response.status, response.text);
                         formMessage.textContent = i18next.t('form.success_message', { name: name });
                         formMessage.style.display = 'block';
                         setTimeout(() => formMessage.style.display = 'none', 5000);
                         contactForm.reset();
-                    })
-                    .catch((error) => {
+                    } catch (error) {
                         console.error('邮件发送失败:', error);
-                        formMessage.textContent = i18next.t('form.error_message', { error: error.text || error.message });
+                        formMessage.textContent = i18next.t('form.error_message', { error: error.text || error.message || '未知错误，可能服务未连接或网络问题' });
                         formMessage.style.display = 'block';
                         setTimeout(() => formMessage.style.display = 'none', 5000);
-                    });
+                    }
+
+                    // 保持页面位置
+                    window.scrollTo({ top: formPosition, behavior: 'smooth' });
                 });
             } else {
                 console.error('未找到 "contact-form" 元素');
