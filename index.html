@@ -172,6 +172,18 @@ nav a:hover {
     color: #778da9;
     margin: 5px 0;
 }
+        .banner {
+    margin-top: 20px;
+    padding: 10px;
+    background: rgba(65, 90, 119, 0.2);
+    border-radius: 5px;
+    animation: slide 10s infinite;
+}
+@keyframes slide {
+    0% { transform: translateX(-10%); opacity: 0.5; }
+    50% { transform: translateX(0); opacity: 1; }
+    100% { transform: translateX(10%); opacity: 0.5; }
+}
         @keyframes glow {
             from { text-shadow: 0 0 5px #778da9; }
             to { text-shadow: 0 0 15px #778da9, 0 0 25px #415a77; }
@@ -224,6 +236,9 @@ nav a:hover {
             <a href="#join">Join</a>
             <a href="learn-more.html">Learn More</a>
         </nav>
+        <div class="banner">
+    <p id="banner-text">🚀 Join our AMA on March 15, 2025! Discuss the future of Web3 trading with us!</p>
+</div>
     </header>
 
     <section>
